@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "579411398857",
+    "firebase_url": "https://able-f2312.firebaseio.com",
+    "project_id": "able-f2312",
+    "storage_bucket": "able-f2312.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579411398857:android:924bde60c90b9fec8efd18",
+        "android_client_info": {
+          "package_name": "net.ableapps.able"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "579411398857-6a8ohnl5cj1mtqpr18h5i5h0daotvr2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzJFWpuvDo9Hpuo5Zm47kgn2ci3Jv_6T4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "579411398857-6a8ohnl5cj1mtqpr18h5i5h0daotvr2a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "579411398857-c0col7t79smfkftsrq2dnf51qc0ti2pl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.ableapps.able"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
