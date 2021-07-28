@@ -17,7 +17,7 @@ import { Provider } from "react-redux";
 import {
   language
 } from 'config';
-import  {
+import {
   FirebaseProvider,
   store
 } from "common/src";
@@ -78,7 +78,6 @@ export default function App() {
           });
         }
       } catch (e) {
-        console.log(e);
       }
     }
   }
@@ -92,7 +91,7 @@ export default function App() {
             <AppContainer />
           </AppCommon>
         </FirebaseProvider>
-      </Provider>:
+      </Provider> :
       <View style={styles.container}>
         <ImageBackground
           source={require('./assets/images/intro.jpg')}

@@ -8,17 +8,23 @@ import {
     TouchableWithoutFeedback,
     Platform,
     StyleSheet,
-    Alert
+    Alert,
+    ToastAndroid
 } from 'react-native';
 import { Icon, Button, Header, Input } from 'react-native-elements'
 import { colors } from '../common/theme';
 import { language } from 'config';
-var { height } = Dimensions.get('window');
+import * as ImagePicker from 'expo-image-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import { FirebaseContext } from 'common/src';
 
+
+
 export default function EditProfilePage(props) {
     const { api } = useContext(FirebaseContext);
+    const [idcard_image, setidcard_image] = useState('')
+    const [drivinglicense_img, setdrivinglicense_img] = useState('');
+    const [passenger_id_passImg, set_passenger_id_passImg] = useState('');
     const {
         updateProfile
     } = api;
@@ -28,17 +34,23 @@ export default function EditProfilePage(props) {
 
     useEffect(() => {
         if (auth.info && auth.info.profile) {
+            // console.log('info======>', auth.info.profile.usertype)
+            //passenger, driver
             setProfileData({
-                firstName: !auth.info.profile.firstName || auth.info.profile.firstName === ' '? '' : auth.info.profile.firstName,
-                lastName: !auth.info.profile.lastName || auth.info.profile.lastName === ' '? '' : auth.info.profile.lastName,
-                email: !auth.info.profile.email || auth.info.profile.email === ' '? '' : auth.info.profile.email,
-                mobile: !auth.info.profile.mobile || auth.info.profile.mobile === ' '? '' : auth.info.profile.mobile,
-                loginType:auth.info.profile.loginType?'social':'email',
-                usertype:auth.info.profile.usertype,
-                uid:auth.info.uid
+                firstName: !auth.info.profile.firstName ||
+                    auth.info.profile.firstName === ' ' ? '' : auth.info.profile.firstName,
+                lastName: !auth.info.profile.lastName ||
+                    auth.info.profile.lastName === ' ' ? '' : auth.info.profile.lastName,
+                email: !auth.info.profile.email ||
+                    auth.info.profile.email === ' ' ? '' : auth.info.profile.email,
+                mobile: !auth.info.profile.mobile ||
+                    auth.info.profile.mobile === ' ' ? '' : auth.info.profile.mobile,
+                loginType: auth.info.profile.loginType ? 'social' : 'email',
+                usertype: auth.info.profile.usertype,
+                uid: auth.info.uid
             });
         }
-    }, [auth.info,auth.email]);
+    }, [auth.info, auth.email]);
 
     // email validation
     const validateEmail = (email) => {
@@ -50,33 +62,85 @@ export default function EditProfilePage(props) {
     //register button click after all validation
     const saveProfile = async () => {
         if (
-            profileData.firstName && 
+            profileData.firstName &&
             profileData.firstName.length > 0 &&
-            profileData.firstName && 
+            profileData.firstName &&
             profileData.firstName.length > 0 &&
             profileData.mobile && profileData.mobile.length &&
             validateEmail(profileData.email)
-        ){
+        ) {
             let userData = {
                 firstName: profileData.firstName,
                 lastName: profileData.lastName,
                 mobile: profileData.mobile,
-                email: profileData.email
+                email: profileData.email,
+                drivingLicenseImage: drivinglicense_img,
+                IdCardImage: idcard_image,
+
             }
             dispatch(updateProfile(auth.info, userData));
-            Alert.alert(language.alert,language.profile_updated);
+            Alert.alert(language.alert, language.profile_updated);
             props.navigation.pop();
         }
-        else{
-            Alert.alert(language.alert,language.no_details_error);
+        else {
+            Alert.alert(language.alert, language.no_details_error);
         }
     }
 
+
+    const imageHandler = async name => {
+        const options = {
+            mediaType: 'image',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        console.log('above')
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1.0,
+            base64: true
+        });
+        if (!result.cancelled) {
+            let data = 'data:image/jpeg;base64,' + result.base64;
+            setCapturedImage(result.uri);
+            fetch('https://api.cloudinary.com/v1_1/mernapp/image/upload', {
+                method: "post",
+                body: result.uri
+            }).then(res => res.json()).then(data => {
+                console.log(data.url)
+                switch (name) {
+                    case 'idcard':
+                        setidcard_image(data.url)
+                        break;
+                    case 'license':
+                        setdrivinglicense_img(data.url);
+                        break;
+                    case 'id_pass':
+                        set_passenger_id_passImg(data.url)
+                        break;
+                    default:
+                        break;
+                }
+                // name === 'idcard' ? setidcard_image(data.url) : setdrivinglicense_img(data.url);
+                ToastAndroid.show('uploaded successfully',
+                    ToastAndroid.SHORT, ToastAndroid.CENTER)
+            }).catch(err => {
+                Alert.alert('Error!!!', "image Cannot be uploaded", { text: "OK" })
+            })
+        }
+    }
+
+
+    console.log('idcrd_drvr->', idcard_image, 'lices-->',
+        drivinglicense_img, 'pasenger-->', passenger_id_passImg)
     return (
         <View style={styles.main}>
             <Header
                 backgroundColor={colors.TRANSPARENT}
-                leftComponent={{ icon: 'md-close', type: 'ionicon', color: colors.BLACK, size: 35, component: TouchableWithoutFeedback, onPress:() => { props.navigation.goBack() } }}
+                leftComponent={{ icon: 'md-close', type: 'ionicon', color: colors.BLACK, size: 35, component: TouchableWithoutFeedback, onPress: () => { props.navigation.goBack() } }}
                 containerStyle={styles.headerContainerStyle}
                 innerContainerStyles={styles.headerInnerContainer}
             />
@@ -97,10 +161,10 @@ export default function EditProfilePage(props) {
                                 underlineColorAndroid={colors.TRANSPARENT}
                                 placeholder={language.first_name_placeholder}
                                 placeholderTextColor={colors.GREY.secondary}
-                                value={profileData && profileData.firstName? profileData.firstName: ''}
+                                value={profileData && profileData.firstName ? profileData.firstName : ''}
                                 keyboardType={'email-address'}
                                 inputStyle={styles.inputTextStyle}
-                                onChangeText={(text) => { setProfileData({...profileData, firstName: text}) }}
+                                onChangeText={(text) => { setProfileData({ ...profileData, firstName: text }) }}
                                 secureTextEntry={false}
                                 errorStyle={styles.errorMessageStyle}
                                 inputContainerStyle={styles.inputContainerStyle}
@@ -121,10 +185,10 @@ export default function EditProfilePage(props) {
                                 underlineColorAndroid={colors.TRANSPARENT}
                                 placeholder={language.last_name_placeholder}
                                 placeholderTextColor={colors.GREY.secondary}
-                                value={profileData && profileData.lastName? profileData.lastName: ''}
+                                value={profileData && profileData.lastName ? profileData.lastName : ''}
                                 keyboardType={'email-address'}
                                 inputStyle={styles.inputTextStyle}
-                                onChangeText={(text) => { setProfileData({...profileData, lastName: text}) }}
+                                onChangeText={(text) => { setProfileData({ ...profileData, lastName: text }) }}
                                 secureTextEntry={false}
                                 errorStyle={styles.errorMessageStyle}
                                 inputContainerStyle={styles.inputContainerStyle}
@@ -144,10 +208,10 @@ export default function EditProfilePage(props) {
                                 underlineColorAndroid={colors.TRANSPARENT}
                                 placeholder={language.email_placeholder}
                                 placeholderTextColor={colors.GREY.secondary}
-                                value={profileData && profileData.email? profileData.email: ''}
+                                value={profileData && profileData.email ? profileData.email : ''}
                                 keyboardType={'email-address'}
                                 inputStyle={styles.inputTextStyle}
-                                onChangeText={(text) => { setProfileData({...profileData, email: text}) }}
+                                onChangeText={(text) => { setProfileData({ ...profileData, email: text }) }}
                                 secureTextEntry={false}
                                 blurOnSubmit={true}
                                 errorStyle={styles.errorMessageStyle}
@@ -168,18 +232,32 @@ export default function EditProfilePage(props) {
                                 underlineColorAndroid={colors.TRANSPARENT}
                                 placeholder={language.mobile_no_placeholder}
                                 placeholderTextColor={colors.GREY.secondary}
-                                value={profileData && profileData.mobile? profileData.mobile: ''}
+                                value={profileData && profileData.mobile ? profileData.mobile : ''}
                                 keyboardType={'number-pad'}
                                 inputStyle={styles.inputTextStyle}
-                                onChangeText={(text) => { setProfileData({...profileData, mobile: text}) }}
+                                onChangeText={(text) => { setProfileData({ ...profileData, mobile: text }) }}
                                 secureTextEntry={false}
                                 errorStyle={styles.errorMessageStyle}
                                 inputContainerStyle={styles.inputContainerStyle}
                                 containerStyle={styles.textInputStyle}
                             />
-                        </View>
 
+                        </View>
+                        {auth.info.profile.usertype == 'driver' ? <View style={{ flexDirection: 'row' }}>
+                            <Button titleStyle={styles.buttonTitle}
+                                onPress={() => imageHandler('idcard')}
+                                title='Upload Id card'
+                                buttonStyle={{ ...styles.registerButton, width: width * 0.3 }} />
+                            <Button titleStyle={styles.buttonTitle}
+                                onPress={() => imageHandler('license')}
+                                title='Upload Driving license /psv'
+                                buttonStyle={{ ...styles.registerButton, width: width * 0.3 }} /></View> :
+                            <Button titleStyle={styles.buttonTitle}
+                                onPress={() => imageHandler('ip_pass')}
+                                title='Upload Id/Passport'
+                                buttonStyle={{ ...styles.registerButton, width: width * 0.5 }} />}
                         <View style={styles.buttonContainer}>
+
                             <Button
                                 onPress={saveProfile}
                                 title={language.update_button}
@@ -193,9 +271,8 @@ export default function EditProfilePage(props) {
             </ScrollView>
         </View>
     );
-
 }
-
+const { width, height } = Dimensions.get('window')
 
 
 

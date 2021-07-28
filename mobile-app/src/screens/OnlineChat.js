@@ -77,7 +77,6 @@ export default function OnlineChat(props) {
     <View style={styles.container}>
       <NavigationEvents
         onWillFocus={payload => {
-          console.log("Focus");
           dispatch(fetchChatMessages(bookingId));
         }}
         onWillBlur={payload => {

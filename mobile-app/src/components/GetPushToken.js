@@ -19,7 +19,6 @@ export default async function GetPushToken() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     Alert.alert(language.alert,language.push_error_2);
   }

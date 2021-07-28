@@ -305,7 +305,6 @@ export default function BookedCabScreen(props) {
 
 
         } catch (error) {
-            console.log(error);
             Alert.alert(language.alert, language.location_error);
         }
 
@@ -468,7 +467,6 @@ export default function BookedCabScreen(props) {
             if (supported) {
                 return Linking.openURL(call_link);
             } else {
-                console.log("Unable to call");
             }
         }).catch(err => console.error('An error occurred', err));
     }

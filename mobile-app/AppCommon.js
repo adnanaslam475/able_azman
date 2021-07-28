@@ -15,7 +15,6 @@ const LOCATION_TASK_NAME = 'background-location-task';
 
 TaskManager.defineTask(LOCATION_TASK_NAME, ({ data: { locations }, error }) => {
   if (error) {
-    console.log("Task Error");
     return;
   }
   if (locations.length > 0) {
@@ -31,7 +30,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data: { locations }, error }) => {
         });
       }
     } catch (error) {
-      console.log(error);
     }
   }
 });
@@ -59,11 +57,11 @@ export default function AppCommon({ children }) {
     }
   }, [tasks]);
 
-  useEffect(()=>{
-    if(settings){
+  useEffect(() => {
+    if (settings) {
       loadSound();
     }
-  },[settings]);
+  }, [settings]);
 
   const loadSound = async () => {
     Audio.setAudioModeAsync({
@@ -76,21 +74,22 @@ export default function AppCommon({ children }) {
       playThroughEarpieceAndroid: true,
       useNativeControls: false
     });
-  
-    const { sound } = await Audio.Sound.createAsync(settings.CarHornRepeat?require('./assets/sounds/car_horn_gap.wav'):require('./assets/sounds/car_horn.wav'));
+
+    const { sound } = await Audio.Sound.createAsync(settings.CarHornRepeat ? require('./assets/sounds/car_horn_gap.wav') : require('./assets/sounds/car_horn.wav'));
     sound.setIsLoopingAsync(settings.CarHornRepeat);
     setSound(sound);
   }
 
   const playSound = async () => {
-    sound.playAsync();
+    await sound?.playAsync();
   }
 
   const stopPlaying = async () => {
-    sound.stopAsync();
+    await sound?.stopAsync();
   }
 
-  useEffect(() => {;
+  useEffect(() => {
+    ;
     tokenFetched.current = false;
     locationOn.current = false;
   }, []);
@@ -181,9 +180,9 @@ export default function AppCommon({ children }) {
   const saveToken = async () => {
     let token = await GetPushToken();
     dispatch(
-      api.updatePushToken(
+      api?.updatePushToken(
         auth.info,
-        token?token:'token_error',
+        token ? token : 'token_error',
         Platform.OS == 'ios' ? 'IOS' : 'ANDROID'
       )
     );
@@ -266,7 +265,6 @@ export default function AppCommon({ children }) {
         }
       });
     } catch (error) {
-      console.log(error);
     }
   }
 

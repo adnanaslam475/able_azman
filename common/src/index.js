@@ -178,20 +178,16 @@ const FirebaseProvider  = ({ children }) => {
             api: {
                 MinutesPassed: MinutesPassed, 
                 GetDateString: GetDateString, 
-
                 fetchCoordsfromPlace: fetchCoordsfromPlace, 
                 fetchAddressfromCoords: fetchAddressfromCoords, 
                 getDriveTime: getDriveTime, 
                 getRouteDetails: getRouteDetails, 
-
                 GetDistance: GetDistance, 
                 GetTripDistance: GetTripDistance, 
                 saveUserLocation: (uid,location) => app.database().ref('users/' + uid + '/location').set(location),
                 saveTracking: (bookingId, location) => app.database().ref('tracking/' + bookingId).push(location),
-
                 validateReferer:validateReferer,
                 checkUserExists:checkUserExists,
-                
                 fetchUser: () => (dispatch) => fetchUser()(dispatch)(firebase), 
                 emailSignUp: (data,platform) => emailSignUp(data,platform)(firebase), 
                 mobileSignIn: (verficationId, code) => (dispatch) => mobileSignIn(verficationId, code)(dispatch)(firebase), 

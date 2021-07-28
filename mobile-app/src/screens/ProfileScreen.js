@@ -55,25 +55,25 @@ export default function ProfileScreen(props) {
     }
 
     uploadImage = () => {
-        
+
         return (
             <ActionSheet ref={actionSheetRef}>
-                <TouchableOpacity 
-                    style={{width:'90%',alignSelf:'center',paddingLeft:20,paddingRight:20,borderColor:colors.GREY.iconPrimary,borderBottomWidth:1,height:60,alignItems:'center',justifyContent:'center'}} 
-                    onPress={()=>{_pickImage(ImagePicker.launchCameraAsync)}}
+                <TouchableOpacity
+                    style={{ width: '90%', alignSelf: 'center', paddingLeft: 20, paddingRight: 20, borderColor: colors.GREY.iconPrimary, borderBottomWidth: 1, height: 60, alignItems: 'center', justifyContent: 'center' }}
+                    onPress={() => { _pickImage(ImagePicker.launchCameraAsync) }}
                 >
-                    <Text style={{color:colors.BLUE.greenish_blue,fontWeight:'bold'}}>Camera</Text>
+                    <Text style={{ color: colors.BLUE.greenish_blue, fontWeight: 'bold' }}>Camera</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    style={{width:'90%',alignSelf:'center',paddingLeft:20,paddingRight:20,borderBottomWidth:1,borderColor:colors.GREY.iconPrimary,height:60,alignItems:'center',justifyContent:'center'}} 
-                    onPress={()=>{ _pickImage(ImagePicker.launchImageLibraryAsync)}}
+                <TouchableOpacity
+                    style={{ width: '90%', alignSelf: 'center', paddingLeft: 20, paddingRight: 20, borderBottomWidth: 1, borderColor: colors.GREY.iconPrimary, height: 60, alignItems: 'center', justifyContent: 'center' }}
+                    onPress={() => { _pickImage(ImagePicker.launchImageLibraryAsync) }}
                 >
-                    <Text  style={{color:colors.BLUE.greenish_blue,fontWeight:'bold'}}>Media Library</Text>
+                    <Text style={{ color: colors.BLUE.greenish_blue, fontWeight: 'bold' }}>Media Library</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                     style={{width:'90%',alignSelf:'center',paddingLeft:20,paddingRight:20, height:50,alignItems:'center',justifyContent:'center'}} 
-                    onPress={()=>{actionSheetRef.current?.setModalVisible(false);}}>
-                    <Text  style={{color:'red',fontWeight:'bold'}}>Cancel</Text>
+                <TouchableOpacity
+                    style={{ width: '90%', alignSelf: 'center', paddingLeft: 20, paddingRight: 20, height: 50, alignItems: 'center', justifyContent: 'center' }}
+                    onPress={() => { actionSheetRef.current?.setModalVisible(false); }}>
+                    <Text style={{ color: 'red', fontWeight: 'bold' }}>Cancel</Text>
                 </TouchableOpacity>
             </ActionSheet>
         )
@@ -82,7 +82,7 @@ export default function ProfileScreen(props) {
     _pickImage = async (res) => {
         var pickFrom = res;
         const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
-        
+
         if (status == 'granted') {
             setLoader(true);
             let result = await pickFrom({
@@ -140,7 +140,6 @@ export default function ProfileScreen(props) {
             [
                 {
                     text: language.cancel,
-                    onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
                 {
@@ -265,35 +264,35 @@ export default function ProfileScreen(props) {
                             <Text style={styles.text2}>{profileData ? profileData.usertype : ''}</Text>
                         </View>
                     </View>
-                    {profileData && profileData.usertype == 'driver'?
-                    <View style={styles.myViewStyle}>
-                        <View style={styles.iconViewStyle}>
-                            <Icon
-                                name='thumbs-up-outline'
-                                type='ionicon'
-                                color={colors.GREY.btnPrimary}
-                            />
-                            <Text style={styles.emailStyle}>{language.you_rated_text}</Text>
+                    {profileData && profileData.usertype == 'driver' ?
+                        <View style={styles.myViewStyle}>
+                            <View style={styles.iconViewStyle}>
+                                <Icon
+                                    name='thumbs-up-outline'
+                                    type='ionicon'
+                                    color={colors.GREY.btnPrimary}
+                                />
+                                <Text style={styles.emailStyle}>{language.you_rated_text}</Text>
+                            </View>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <Text style={styles.text2}>{profileData && profileData.usertype && profileData.ratings ? profileData.ratings.userrating : 0}</Text>
+                                <StarRating
+                                    disabled={false}
+                                    maxStars={5}
+                                    starSize={15}
+                                    fullStar={'ios-star'}
+                                    halfStar={'ios-star-half'}
+                                    emptyStar={'ios-star-outline'}
+                                    iconSet={'Ionicons'}
+                                    fullStarColor={colors.YELLOW.primary}
+                                    emptyStarColor={colors.YELLOW.primary}
+                                    halfStarColor={colors.YELLOW.primary}
+                                    rating={profileData && profileData.usertype && profileData.ratings ? parseFloat(profileData.ratings.userrating) : 0}
+                                    containerStyle={styles.contStyle}
+                                />
+                            </View>
                         </View>
-                        <View style={{ flex: 1, flexDirection:'row' }}>
-                            <Text style={styles.text2}>{profileData && profileData.usertype && profileData.ratings? profileData.ratings.userrating:0}</Text>
-                            <StarRating
-                                disabled={false}
-                                maxStars={5}
-                                starSize={15}
-                                fullStar={'ios-star'}
-                                halfStar={'ios-star-half'}
-                                emptyStar={'ios-star-outline'}
-                                iconSet={'Ionicons'}
-                                fullStarColor={colors.YELLOW.primary}
-                                emptyStarColor={colors.YELLOW.primary}
-                                halfStarColor={colors.YELLOW.primary}
-                                rating={profileData && profileData.usertype && profileData.ratings? parseFloat(profileData.ratings.userrating):0}
-                                containerStyle={styles.contStyle}
-                            />
-                        </View>
-                    </View>
-                    :null}
+                        : null}
                 </View>
 
                 <View style={styles.flexView3}>
@@ -507,7 +506,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     contStyle: {
-        width:90,
+        width: 90,
         marginLeft: 20
     }
 });

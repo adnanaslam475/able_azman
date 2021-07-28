@@ -30,7 +30,7 @@ export default function AuthLoadingScreen(props) {
             dispatch(api.fetchPromos());
             props.navigation.navigate('RiderRoot');
           } else if (role === 'driver') {
-            dispatch(api.monitorProfileChanges());
+            dispatch(api?.monitorProfileChanges());
             dispatch(api.fetchBookings(auth.info.uid, role));
             dispatch(api.fetchPaymentMethods());
             dispatch(api.fetchTasks());
@@ -40,18 +40,19 @@ export default function AuthLoadingScreen(props) {
           }
           else {
             Alert.alert(language.alert, language.not_valid_user_type);
-            dispatch(api.signOut());
+            dispatch(api?.signOut());
             props.navigation.navigate('Intro');
           }
         }
         else {
           Alert.alert(language.alert, language.require_approval);
-          dispatch(api.signOut());
+          dispatch(api?.signOut());
           props.navigation.navigate('Intro');
         }
-      }else{
-        Alert.alert(language.alert, language.user_issue_contact_admin);
-        dispatch(api.signOut());
+      } else {
+        Alert.alert(language.alert,
+          language.user_issue_contact_admin);
+        dispatch(api?.signOut());
         props.navigation.navigate('Intro');
       }
     }
@@ -62,7 +63,7 @@ export default function AuthLoadingScreen(props) {
       dispatch(api.clearLoginError());
       props.navigation.navigate('Intro');
     }
-  }, [auth.error,auth.error.msg]);
+  }, [auth.error, auth.error.msg]);
 
   return (
     <View style={styles.container}>

@@ -52,18 +52,18 @@ export default function IntroScreen(props) {
 
     useEffect(() => {
         DisclamerOK();
-    },[]);
+    }, []);
 
     const DisclamerOK = () => {
-        if(Platform.OS == 'android' && !fromLogout){
-          AsyncStorage.getItem('firstRun', (err, result) => {
-            if(!result){
-              Alert.alert(
-                language.disclaimer,
-                language.disclaimer_text
-              );
-            }
-          });
+        if (Platform.OS == 'android' && !fromLogout) {
+            AsyncStorage.getItem('firstRun', (err, result) => {
+                if (!result) {
+                    Alert.alert(
+                        language.disclaimer,
+                        language.disclaimer_text
+                    );
+                }
+            });
         }
     }
 
@@ -81,10 +81,10 @@ export default function IntroScreen(props) {
                 dispatch(facebookSignIn(token));
             }
             else {
-                Alert.alert(language.alert,language.facebook_login_auth_error);
+                Alert.alert(language.alert, language.facebook_login_auth_error);
             }
         } catch ({ message }) {
-            Alert.alert(language.alert,language.facebook_login_auth_error`${message}`);
+            Alert.alert(language.alert, language.facebook_login_auth_error`${message}`);
         }
     }
 
@@ -110,9 +110,8 @@ export default function IntroScreen(props) {
 
         } catch (e) {
             if (e.code === 'ERR_CANCELED') {
-                console.log("Cencelled");
             } else {
-                Alert.alert(language.alert,language.apple_signin_error);
+                Alert.alert(language.alert, language.apple_signin_error);
             }
         }
     }
@@ -144,44 +143,44 @@ export default function IntroScreen(props) {
                 onPress={onPressLoginEmail}
                 style={styles.materialButtonDark}
             >{language.login}</MaterialButtonDark>
-            {features.MobileLoginEnabled?
-            <MaterialButtonDark
-                onPress={onPressRegister}
-                style={styles.materialButtonDark2}
-            >{language.register}</MaterialButtonDark>
-            :null}
-            {(Platform.OS == 'ios' && features.AppleLoginEnabled) || features.FacebookLoginEnabled?
-            <View style={styles.seperator}>
-                <View style={styles.lineLeft}></View>
-                <View style={styles.lineLeftFiller}>
-                    <Text style={styles.sepText}>{language.spacer_message}</Text>
-                </View>
-                <View style={styles.lineRight}></View>
-            </View>
-            :null}
-
-            {(Platform.OS == 'ios' && features.AppleLoginEnabled) || features.FacebookLoginEnabled?
-            <View style={styles.socialBar}>
-                {features.FacebookLoginEnabled?
-                <TouchableOpacity style={styles.socialIcon} onPress={FbLogin}>
-                    <Image
-                        source={require("../../assets/images/image_fb.png")}
-                        resizeMode="contain"
-                        style={styles.socialIconImage}
-                    ></Image>
-                </TouchableOpacity>
-                :null}
-                {Platform.OS == 'ios' && features.AppleLoginEnabled?
-                    <TouchableOpacity style={styles.socialIcon} onPress={AppleLogin}>
-                        <Image
-                            source={require("../../assets/images/image_apple.png")}
-                            resizeMode="contain"
-                            style={styles.socialIconImage}
-                        ></Image>
-                    </TouchableOpacity>
+            {features.MobileLoginEnabled ?
+                <MaterialButtonDark
+                    onPress={onPressRegister}
+                    style={styles.materialButtonDark2}
+                >{language.register}</MaterialButtonDark>
                 : null}
-            </View>
-            :null}
+            {(Platform.OS == 'ios' && features.AppleLoginEnabled) || features.FacebookLoginEnabled ?
+                <View style={styles.seperator}>
+                    <View style={styles.lineLeft}></View>
+                    <View style={styles.lineLeftFiller}>
+                        <Text style={styles.sepText}>{language.spacer_message}</Text>
+                    </View>
+                    <View style={styles.lineRight}></View>
+                </View>
+                : null}
+
+            {(Platform.OS == 'ios' && features.AppleLoginEnabled) || features.FacebookLoginEnabled ?
+                <View style={styles.socialBar}>
+                    {features.FacebookLoginEnabled ?
+                        <TouchableOpacity style={styles.socialIcon} onPress={FbLogin}>
+                            <Image
+                                source={require("../../assets/images/image_fb.png")}
+                                resizeMode="contain"
+                                style={styles.socialIconImage}
+                            ></Image>
+                        </TouchableOpacity>
+                        : null}
+                    {Platform.OS == 'ios' && features.AppleLoginEnabled ?
+                        <TouchableOpacity style={styles.socialIcon} onPress={AppleLogin}>
+                            <Image
+                                source={require("../../assets/images/image_apple.png")}
+                                resizeMode="contain"
+                                style={styles.socialIconImage}
+                            ></Image>
+                        </TouchableOpacity>
+                        : null}
+                </View>
+                : null}
             <View>
                 <TouchableOpacity style={styles.terms} onPress={openTerms}>
                     <Text style={styles.actionText}>{language.terms}</Text>

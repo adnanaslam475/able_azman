@@ -15,9 +15,7 @@ export function RequestPushMsg(token, title, msg) {
         })
     })
     .then((response) => {
-        console.log(response);
     })
     .catch((error) => {
-        console.log(error)
     });
 }

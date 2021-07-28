@@ -266,7 +266,6 @@ export const facebookSignIn = (token) => (dispatch) => (firebase) => {
         }
       })
       .catch(error => {
-        console.log(error);
         dispatch({
           type: USER_SIGN_IN_FAILED,
           payload: error

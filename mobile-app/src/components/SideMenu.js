@@ -73,7 +73,6 @@ export default function SideMenu(props){
             if (supported) {
                 return Linking.openURL(call_link);
             } else {
-                console.log("Unable to call");
             }
         }).catch(err => console.error('An error occurred', err));
     }
@@ -122,7 +121,6 @@ export default function SideMenu(props){
                                                 [
                                                     {
                                                         text: language.cancel,
-                                                        onPress: () => console.log('Cancel Pressed'),
                                                         style: 'cancel'
                                                     },
                                                     {
