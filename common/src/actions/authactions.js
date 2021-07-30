@@ -62,8 +62,8 @@ export const fetchUser = () => (dispatch) => (firebase) => {
       settingsRef.once("value", settingdata => {
         let settings = settingdata.val();
         let password_provider_found = false;
-        for(let i=0;i< user.providerData.length; i++){
-          if(user.providerData[i].providerId == 'password'){
+        for (let i = 0; i < user.providerData.length; i++) {
+          if (user.providerData[i].providerId == 'password') {
             password_provider_found = true;
             break;
           }
@@ -134,11 +134,11 @@ export const checkUserExists = async (regData) => {
   return json;
 };
 
-export const emailSignUp = (regData,platform) => async (firebase) => {
+export const emailSignUp = (regData, platform) => async (firebase) => {
 
   let url = `${cloud_function_server_url}/user_signup`;
   let cors_proxy = 'https://cors-proxy.dev.exicube.com/';
-  url = platform == 'web'? cors_proxy + url : url;
+  url = platform == 'web' ? cors_proxy + url : url;
 
   const {
     driverDocsRef
@@ -259,10 +259,10 @@ export const facebookSignIn = (token) => (dispatch) => (firebase) => {
             referralId: (user.additionalUserInfo.profile.first_name ? user.additionalUserInfo.profile.first_name.toLowerCase() : 'temp') + Math.floor(1000 + Math.random() * 9000).toString(),
             approved: true,
             walletBalance: 0,
-            loginType:'facebook'
+            loginType: 'facebook'
           }
           singleUserRef(user.user.uid).set(userData);
-          updateProfile({...user.user, profile:{}},userData);
+          updateProfile({ ...user.user, profile: {} }, userData);
         }
       })
       .catch(error => {
@@ -289,10 +289,10 @@ export const facebookSignIn = (token) => (dispatch) => (firebase) => {
               referralId: (user.additionalUserInfo.profile.first_name ? user.additionalUserInfo.profile.first_name.toLowerCase() : 'temp') + Math.floor(1000 + Math.random() * 9000).toString(),
               approved: true,
               walletBalance: 0,
-              loginType:'facebook'
+              loginType: 'facebook'
             }
             singleUserRef(user.user.uid).set(userData);
-            updateProfile({...user.user, profile:{}},userData);
+            updateProfile({ ...user.user, profile: {} }, userData);
           }
         })
         .catch(error => {
@@ -338,10 +338,10 @@ export const appleSignIn = (credentialData) => (dispatch) => (firebase) => {
             referralId: 'rider' + Math.floor(1000 + Math.random() * 9000).toString(),
             approved: true,
             walletBalance: 0,
-            loginType:'apple'
+            loginType: 'apple'
           }
           singleUserRef(user.user.uid).set(userData);
-          updateProfile({...user.user, profile:{}},userData);
+          updateProfile({ ...user.user, profile: {} }, userData);
         }
       })
       .catch((error) => {
@@ -365,10 +365,10 @@ export const appleSignIn = (credentialData) => (dispatch) => (firebase) => {
               referralId: 'rider' + Math.floor(1000 + Math.random() * 9000).toString(),
               approved: true,
               walletBalance: 0,
-              loginType:'apple'
+              loginType: 'apple'
             }
             singleUserRef(user.user.uid).set(userData);
-            updateProfile({...user.user, profile:{}},userData);
+            updateProfile({ ...user.user, profile: {} }, userData);
           }
         })
         .catch(error => {
@@ -440,7 +440,6 @@ export const updateProfile = (userAuthData, updateData) => (dispatch) => (fireba
 
 
 export const updateProfileImage = (userAuthData, imageBlob) => (dispatch) => (firebase) => {
-
   const {
     singleUserRef,
     profileImageRef,
@@ -462,24 +461,25 @@ export const updateProfileImage = (userAuthData, imageBlob) => (dispatch) => (fi
   })
 };
 
-export const updatePushToken = (userAuthData, token, platform) => (dispatch) => (firebase) => {
+export const updatePushToken = (userAuthData, token,
+  platform) => (dispatch) => (firebase) => {
 
-  const {
-    singleUserRef,
-  } = firebase;
+    const {
+      singleUserRef,
+    } = firebase;
 
-  let profile = userAuthData.profile;
-  profile.pushToken = token;
-  profile.userPlatform = platform;
-  dispatch({
-    type: UPDATE_USER_PROFILE,
-    payload: profile
-  });
-  singleUserRef(userAuthData.uid).update({
-    pushToken: token,
-    userPlatform: platform
-  });
-};
+    let profile = userAuthData.profile;
+    profile.pushToken = token;
+    profile.userPlatform = platform;
+    dispatch({
+      type: UPDATE_USER_PROFILE,
+      payload: profile
+    });
+    singleUserRef(userAuthData.uid).update({
+      pushToken: token,
+      userPlatform: platform
+    });
+  };
 
 export const clearLoginError = () => (dispatch) => (firebase) => {
   dispatch({

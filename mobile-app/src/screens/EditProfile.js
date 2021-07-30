@@ -76,7 +76,6 @@ export default function EditProfilePage(props) {
                 email: profileData.email,
                 drivingLicenseImage: drivinglicense_img,
                 IdCardImage: idcard_image,
-
             }
             dispatch(updateProfile(auth.info, userData));
             Alert.alert(language.alert, language.profile_updated);
@@ -89,53 +88,74 @@ export default function EditProfilePage(props) {
 
 
     const imageHandler = async name => {
-        const options = {
-            mediaType: 'image',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-        console.log('above')
+        // const options = {
+        //     mediaType: 'image',
+        //     storageOptions: {
+        //         skipBackup: true,
+        //         path: 'images',
+        //     },
+        // };
         let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
+            // mediaTypes: ImagePicker.MediaTypeOptions.Images,
             aspect: [4, 3],
             quality: 1.0,
-            base64: true
         });
         if (!result.cancelled) {
-            let data = 'data:image/jpeg;base64,' + result.base64;
-            setCapturedImage(result.uri);
+            console.log('this-is-->', result.uri);
+            let base64Img = `data:image/jpg;base64,${result.base64}`;
+
+
+
+            const source = {
+                uri: result.uri,
+                type: result.type,
+                name: Math.random().toFixed(19).split('.')[1]
+            }
+            const data = new FormData()
+            data.append('file', source)
+            data.append("upload_preset", "olxApp")
+            data.append("api_key", "556571676319423");
+            data.append("cloud_name", "mernapp")
+            console.log(JSON.stringify(data))
             fetch('https://api.cloudinary.com/v1_1/mernapp/image/upload', {
-                method: "post",
-                body: result.uri
-            }).then(res => res.json()).then(data => {
-                console.log(data.url)
-                switch (name) {
-                    case 'idcard':
-                        setidcard_image(data.url)
-                        break;
-                    case 'license':
-                        setdrivinglicense_img(data.url);
-                        break;
-                    case 'id_pass':
-                        set_passenger_id_passImg(data.url)
-                        break;
-                    default:
-                        break;
+                body: data,
+                mode: 'no-cors',
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+
                 }
-                // name === 'idcard' ? setidcard_image(data.url) : setdrivinglicense_img(data.url);
+            }).then(async function (res) {
+                console.log('--->', res.json())
+                await res.json();
+            }).then(function (data) {
+                console.log('uploaded-->', data);
+
+                // switch (name) {
+                //     case 'idcard':
+                //         setidcard_image(data.url)
+                //         break;
+                //     case 'license':
+                //         setdrivinglicense_img(data.url);
+                //         break;
+                //     case 'id_pass':
+                //         set_passenger_id_passImg(data.url)
+                //         break;
+                //     default:
+                //         break;
+                // }
                 ToastAndroid.show('uploaded successfully',
                     ToastAndroid.SHORT, ToastAndroid.CENTER)
             }).catch(err => {
+                console.log('err129', err)
                 Alert.alert('Error!!!', "image Cannot be uploaded", { text: "OK" })
             })
         }
     }
 
 
-    console.log('idcrd_drvr->', idcard_image, 'lices-->',
-        drivinglicense_img, 'pasenger-->', passenger_id_passImg)
+    // console.log('idcrd_drvr->', idcard_image, 'lices-->',
+    //     drivinglicense_img, 'pasenger-->', passenger_id_passImg)
     return (
         <View style={styles.main}>
             <Header

@@ -59,10 +59,17 @@ export default function ProfileScreen(props) {
         return (
             <ActionSheet ref={actionSheetRef}>
                 <TouchableOpacity
-                    style={{ width: '90%', alignSelf: 'center', paddingLeft: 20, paddingRight: 20, borderColor: colors.GREY.iconPrimary, borderBottomWidth: 1, height: 60, alignItems: 'center', justifyContent: 'center' }}
+                    style={{
+                        width: '90%', alignSelf: 'center', paddingLeft: 20,
+                        paddingRight: 20, borderColor: colors.GREY.iconPrimary,
+                        borderBottomWidth: 1, height: 60, alignItems: 'center', justifyContent: 'center'
+                    }}
                     onPress={() => { _pickImage(ImagePicker.launchCameraAsync) }}
                 >
-                    <Text style={{ color: colors.BLUE.greenish_blue, fontWeight: 'bold' }}>Camera</Text>
+                    <Text style={{
+                        color: colors.BLUE.greenish_blue,
+                        fontWeight: 'bold'
+                    }}>Camera</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ width: '90%', alignSelf: 'center', paddingLeft: 20, paddingRight: 20, borderBottomWidth: 1, borderColor: colors.GREY.iconPrimary, height: 60, alignItems: 'center', justifyContent: 'center' }}
@@ -103,7 +110,8 @@ export default function ProfileScreen(props) {
                         resolve(xhr.response);
                     };
                     xhr.onerror = function () {
-                        Alert.alert(language.alert, language.image_upload_error);
+                        Alert.alert(language.alert,
+                            language.image_upload_error);
                         setLoader(false);
                     };
                     xhr.responseType = 'blob';
