@@ -8,7 +8,7 @@ import { FirebaseContext } from 'common/src';
 export default function RegistrationPage(props) {
   const { api } = useContext(FirebaseContext);
   const {
-    emailSignUp, 
+    emailSignUp,
     validateReferer,
     checkUserExists
   } = api;
@@ -28,46 +28,47 @@ export default function RegistrationPage(props) {
 
   const clickRegister = async (regData) => {
     setLoading(true);
-    checkUserExists(regData).then((res)=>{
-      if(res.users && res.users.length>0){
+    checkUserExists(regData).then((res) => {
+      if (res.users && res.users.length > 0) {
         setLoading(false);
-        Alert.alert(language.alert,language.user_exists);
+        Alert.alert(language.alert, language.user_exists);
       }
-      else if(res.error){
+      else if (res.error) {
         setLoading(false);
-        Alert.alert(language.alert,language.email_or_mobile_issue);
+        Alert.alert(language.alert, language.email_or_mobile_issue);
       }
-      else{
+      else {
         if (regData.referralId && regData.referralId.length > 0) {
-          validateReferer(regData.referralId).then((referralInfo)=>{
+          validateReferer(regData.referralId).then((referralInfo) => {
             if (referralInfo.uid) {
-              emailSignUp({...regData, signupViaReferral: referralInfo.uid},'app').then((res)=>{
+              emailSignUp({ ...regData, signupViaReferral: referralInfo.uid }, 'app').then((res) => {
                 setLoading(false);
-                if(res.uid){
-                  Alert.alert(language.alert,language.account_create_successfully);
+                if (res.uid) {
+                  console.log('uuid------------->',res.uid)
+                  Alert.alert(language.alert, language.account_create_successfully);
                   props.navigation.navigate('Login');
-                }else{
+                } else {
                   setCommonAlert({ open: true, msg: language.reg_error });
-                  Alert.alert(language.alert,language.reg_error);
+                  Alert.alert(language.alert, language.reg_error);
                 }
               })
-            }else{
+            } else {
               setLoading(false);
-              Alert.alert(language.alert,language.referer_not_found)
+              Alert.alert(language.alert, language.referer_not_found)
             }
-          }).catch((error)=>{
+          }).catch((error) => {
             setLoading(false);
-            Alert.alert(language.alert,language.referer_not_found)
+            Alert.alert(language.alert, language.referer_not_found)
           });
         } else {
-          emailSignUp(regData,'app').then((res)=>{
+          emailSignUp(regData, 'app').then((res) => {
             setLoading(false);
-            if(res.uid){
-              Alert.alert(language.alert,language.account_create_successfully);
+            if (res.uid) {
+              Alert.alert(language.alert, language.account_create_successfully);
               props.navigation.navigate('Login');
-            }else{
+            } else {
               setCommonAlert({ open: true, msg: language.reg_error });
-              Alert.alert(language.alert,language.reg_error);
+              Alert.alert(language.alert, language.reg_error);
             }
           })
         }
@@ -77,14 +78,14 @@ export default function RegistrationPage(props) {
 
   return (
     <View style={styles.containerView}>
-      {carTypes?
-      <Registration
-        cars={carTypes}
-        onPressRegister={(regData) => clickRegister(regData)}
-        onPressBack={() => { props.navigation.goBack() }}
-        loading={loading}>
-      </Registration>
-      :null}
+      {carTypes ?
+        <Registration
+          cars={carTypes}
+          onPressRegister={(regData) => clickRegister(regData)}
+          onPressBack={() => { props.navigation.goBack() }}
+          loading={loading}>
+        </Registration>
+        : null}
     </View>
   );
 
@@ -93,3 +94,4 @@ const styles = StyleSheet.create({
   containerView: { flex: 1 },
   textContainer: { textAlign: "center" },
 });
+// s9bTDVYz3veGYow6Hwnbm1dJ6nI2

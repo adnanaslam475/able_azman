@@ -33,10 +33,11 @@ const Dashboard = () => {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 }),
-                err => console.log(err)
-            );
+                err => console.log('err')
+            )
         }
     }, [mylocation]);
+    
 
     useEffect(() => {
         if (settingsdata.settings) {

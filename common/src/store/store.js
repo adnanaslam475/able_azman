@@ -6,6 +6,8 @@ import { authreducer as auth } from "../reducers/authreducer";
 import { cartypesreducer as cartypes } from "../reducers/cartypesreducer";
 import { bookingslistreducer as bookinglistdata } from "../reducers/bookingslistreducer";
 import { estimatereducer as estimatedata } from "../reducers/estimatereducer";
+
+//adnan work here
 import { bookingreducer as bookingdata } from "../reducers/bookingreducer";
 import { cancelreasonreducer as cancelreasondata } from "../reducers/cancelreasonreducer";
 import { promoreducer as promodata } from "../reducers/promoreducer";
@@ -44,6 +46,7 @@ const reducers = combineReducers({
   gpsdata
 });
 
-let middleware = [thunk,logger];
+let middleware = [thunk];
 
-export const store = createStore(reducers, {}, applyMiddleware(...middleware));
+export const store = createStore(reducers, {},
+  applyMiddleware(...middleware));

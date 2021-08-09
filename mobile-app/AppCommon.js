@@ -13,7 +13,8 @@ import { Audio } from 'expo-av';
 
 const LOCATION_TASK_NAME = 'background-location-task';
 
-TaskManager.defineTask(LOCATION_TASK_NAME, ({ data: { locations }, error }) => {
+TaskManager.defineTask(LOCATION_TASK_NAME, ({ data: {
+  locations }, error }) => {
   if (error) {
     return;
   }
@@ -97,7 +98,7 @@ export default function AppCommon({ children }) {
   useEffect(() => {
     if (gps.location) {
       if (auth.info && auth.info.uid) {
-        api.saveUserLocation(auth.info.uid, {
+        api?.saveUserLocation(auth.info.uid, {
           lat: gps.location.lat,
           lng: gps.location.lng
         });

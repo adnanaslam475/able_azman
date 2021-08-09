@@ -55,7 +55,6 @@ export default function ProfileScreen(props) {
     }
 
     uploadImage = () => {
-
         return (
             <ActionSheet ref={actionSheetRef}>
                 <TouchableOpacity
@@ -88,8 +87,8 @@ export default function ProfileScreen(props) {
 
     _pickImage = async (res) => {
         var pickFrom = res;
-        const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
-
+        const { status } = await Permissions.askAsync(Permissions.CAMERA,
+            Permissions.MEDIA_LIBRARY);
         if (status == 'granted') {
             setLoader(true);
             let result = await pickFrom({
@@ -99,25 +98,25 @@ export default function ProfileScreen(props) {
             });
             actionSheetRef.current?.setModalVisible(false);
             if (!result.cancelled) {
+                console.log(result.uri)
                 let data = 'data:image/jpeg;base64,' + result.base64;
                 setProfileData({
                     ...profileData,
                     profile_image: result.uri
-                })
+                });
                 const blob = await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
                         resolve(xhr.response);
                     };
                     xhr.onerror = function () {
-                        Alert.alert(language.alert,
-                            language.image_upload_error);
                         setLoader(false);
                     };
                     xhr.responseType = 'blob';
-                    xhr.open('GET', Platform.OS == 'ios' ? data : result.uri, true);
+                    xhr.open('GET', Platform.OS == 'ios' ? data :
+                        result.uri, true);
                     xhr.send(null);
-                });
+                })
                 if (blob) {
                     dispatch(updateProfileImage(auth.info, blob));
                 }
@@ -175,9 +174,7 @@ export default function ProfileScreen(props) {
                 innerContainerStyles={{ marginLeft: 10, marginRight: 10 }}
             />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollStyle}>
-                {
-                    uploadImage()
-                }
+                {uploadImage()}
                 {profileData && profileData.usertype == 'driver' ?
                     <View style={styles.scrollViewStyle1} >
                         <Text style={styles.profStyle}>{language.active_status}</Text>
@@ -198,7 +195,6 @@ export default function ProfileScreen(props) {
                         onPress={editProfile}
                     />
                 </View>
-
                 <View style={styles.viewStyle}>
                     <View style={styles.imageParentView}>
                         <View style={styles.imageViewStyle} >
@@ -208,12 +204,14 @@ export default function ProfileScreen(props) {
                                         <ActivityIndicator size="large" color={colors.BLUE.secondary} />
                                     </View>
                                     : <TouchableOpacity onPress={showActionSheet}>
-                                        <Image source={profileData && profileData.profile_image ? { uri: profileData.profile_image } : require('../../assets/images/profilePic.png')} style={{ borderRadius: 130 / 2, width: 130, height: 130 }} />
+                                        <Image source={profileData && profileData?.profile_image ?
+                                            { uri: profileData.profile_image } : require('../../assets/images/profilePic.png')} style={{ borderRadius: 130 / 2, width: 130, height: 130 }} />
                                     </TouchableOpacity>
                             }
                         </View>
                     </View>
-                    <Text style={styles.textPropStyle} >{profileData && profileData.firstName.toUpperCase() + " " + profileData.lastName.toUpperCase()}</Text>
+                    <Text style={styles.textPropStyle} >{profileData && profileData.firstName.toUpperCase() +
+                        " " + profileData?.lastName.toUpperCase()}</Text>
                 </View>
 
                 <View style={styles.newViewStyle}>

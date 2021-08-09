@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import {language} from "config";
+import { language } from "config";
 import AlertDialog from '../components/AlertDialog';
 import { FirebaseContext } from 'common';
 
@@ -46,27 +46,27 @@ const MyProfile = () => {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [commonAlert, setCommonAlert] = useState({open:false,msg:''});
+  const [commonAlert, setCommonAlert] = useState({ open: false, msg: '' });
 
   const [data, setData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     mobile: '',
-    loginType:null,
-    usertype:''
+    loginType: null,
+    usertype: ''
   });
 
   useEffect(() => {
     if (auth.info && auth.info.profile) {
       setData({
-        firstName: !auth.info.profile.firstName || auth.info.profile.firstName === ' '? '' : auth.info.profile.firstName,
-        lastName: !auth.info.profile.lastName || auth.info.profile.lastName === ' '? '' : auth.info.profile.lastName,
-        email: !auth.info.profile.email || auth.info.profile.email === ' '? '' : auth.info.profile.email,
-        mobile: !auth.info.profile.mobile || auth.info.profile.mobile === ' '? '' : auth.info.profile.mobile,
-        loginType:auth.info.profile.loginType?'social':'email',
-        usertype:auth.info.profile.usertype,
-        uid:auth.info.uid
+        firstName: !auth.info.profile.firstName || auth.info.profile.firstName === ' ' ? '' : auth.info.profile.firstName,
+        lastName: !auth.info.profile.lastName || auth.info.profile.lastName === ' ' ? '' : auth.info.profile.lastName,
+        email: !auth.info.profile.email || auth.info.profile.email === ' ' ? '' : auth.info.profile.email,
+        mobile: !auth.info.profile.mobile || auth.info.profile.mobile === ' ' ? '' : auth.info.profile.mobile,
+        loginType: auth.info.profile.loginType ? 'social' : 'email',
+        usertype: auth.info.profile.usertype,
+        uid: auth.info.uid
       });
     }
   }, [auth.info]);
@@ -77,22 +77,22 @@ const MyProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(data.email)){
-      dispatch(updateProfile(auth.info,{
+    if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(data.email)) {
+      dispatch(updateProfile(auth.info, {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         mobile: data.mobile
       }));
-      setCommonAlert({open:true,msg:language.profile_updated})
-    }else{
-      setCommonAlert({open:true,msg:language.proper_email})
+      setCommonAlert({ open: true, msg: language.profile_updated })
+    } else {
+      setCommonAlert({ open: true, msg: language.proper_email })
     }
   }
 
   const handleCommonAlertClose = (e) => {
     e.preventDefault();
-    setCommonAlert({open:false,msg:''})
+    setCommonAlert({ open: false, msg: '' })
   };
 
   return (
@@ -140,7 +140,7 @@ const MyProfile = () => {
               autoComplete="email"
               onChange={updateData}
               value={data.email}
-              disabled={data.loginType==='email'?true:false}
+              disabled={data.loginType === 'email' ? true : false}
             />
             <TextField
               variant="outlined"
@@ -153,7 +153,7 @@ const MyProfile = () => {
               autoComplete="mobile"
               onChange={updateData}
               value={data.mobile}
-              disabled={data.loginType==='email'?true:false}
+              disabled={data.loginType === 'email' ? true : false}
             />
             <TextField
               variant="outlined"

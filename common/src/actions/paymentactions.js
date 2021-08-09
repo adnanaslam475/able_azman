@@ -9,7 +9,7 @@ import {
     UPDATE_USER_PROFILE
 } from "../store/types";
 
-import { 
+import {
     cloud_function_server_url,
     language
 } from 'config';
@@ -34,7 +34,7 @@ export const fetchPaymentMethods = () => (dispatch) => (firebase) => {
                     type: FETCH_PAYMENT_METHODS_SUCCESS,
                     payload: responseJson,
                 });
-            }else{
+            } else {
                 dispatch({
                     type: FETCH_PAYMENT_METHODS_FAILED,
                     payload: language.no_provider_found,
@@ -53,7 +53,7 @@ export const clearMessage = () => (dispatch) => (firebase) => {
     dispatch({
         type: CLEAR_PAYMENT_MESSAGES,
         payload: null,
-    });    
+    });
 };
 
 
@@ -80,32 +80,32 @@ export const addToWallet = (uid, amount) => (dispatch) => (firebase) => {
                 txRef: 'AdminCredit'
             }
             walletBalRef(uid).set(walletBalance).then(() => {
-                walletHistoryRef(uid).push(details).then(()=>{
+                walletHistoryRef(uid).push(details).then(() => {
                     dispatch({
                         type: UPDATE_WALLET_BALANCE_SUCCESS,
                         payload: language.wallet_updated
                     });
-                }).catch(error=>{
+                }).catch(error => {
                     dispatch({
                         type: UPDATE_WALLET_BALANCE_FAILED,
                         payload: error.code + ": " + error.message,
-                    });            
+                    });
                 })
-                RequestPushMsg(snapshot.val().pushToken, language.notification_title, language.wallet_updated);
-            }).catch(error=>{
+                RequestPushMsg(snapshot.val().pushToken, language.notification_title,
+                    language.wallet_updated);
+            }).catch(error => {
                 dispatch({
                     type: UPDATE_WALLET_BALANCE_FAILED,
                     payload: error.code + ": " + error.message,
                 });
             });
-            
+
         }
     });
 };
 
 
 export const updateWalletBalance = (balance, details) => (dispatch) => (firebase) => {
-
     const {
         walletBalRef,
         walletHistoryRef,
@@ -113,14 +113,14 @@ export const updateWalletBalance = (balance, details) => (dispatch) => (firebase
         singleUserRef,
         withdrawRef
     } = firebase;
-    
+
     let uid = auth.currentUser.uid;
     dispatch({
         type: UPDATE_WALLET_BALANCE,
         payload: null
     });
     walletBalRef(uid).set(balance).then(() => {
-        walletHistoryRef(uid).push(details).then(()=>{
+        walletHistoryRef(uid).push(details).then(() => {
             singleUserRef(uid).once("value", snapshot => {
                 if (snapshot.val()) {
                     let profile = snapshot.val();
@@ -133,27 +133,27 @@ export const updateWalletBalance = (balance, details) => (dispatch) => (firebase
                         payload: language.wallet_updated
                     });
                     RequestPushMsg(snapshot.val().pushToken, language.notification_title, language.wallet_updated);
-                    if(details.type == 'Withdraw'){
+                    if (details.type == 'Withdraw') {
                         withdrawRef.push({
-                            uid : uid,
-                            name : profile.firstName +  ' ' + profile.lastName,
-                            amount : details.amount,
-                            date : details.date,
-                            bankName : profile.bankName? profile.bankName : '',
-                            bankCode : profile.bankCode? profile.bankCode : '',
-                            bankAccount : profile.bankAccount? profile.bankAccount : '',
-                            processed:false
+                            uid: uid,
+                            name: profile.firstName + ' ' + profile.lastName,
+                            amount: details.amount,
+                            date: details.date,
+                            bankName: profile.bankName ? profile.bankName : '',
+                            bankCode: profile.bankCode ? profile.bankCode : '',
+                            bankAccount: profile.bankAccount ? profile.bankAccount : '',
+                            processed: false
                         });
                     }
                 }
-            }); 
-        }).catch(error=>{
+            });
+        }).catch(error => {
             dispatch({
                 type: UPDATE_WALLET_BALANCE_FAILED,
                 payload: error.code + ": " + error.message,
-            });            
+            });
         })
-    }).catch(error=>{
+    }).catch(error => {
         dispatch({
             type: UPDATE_WALLET_BALANCE_FAILED,
             payload: error.code + ": " + error.message,

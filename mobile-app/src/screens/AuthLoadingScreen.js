@@ -23,7 +23,7 @@ export default function AuthLoadingScreen(props) {
         let role = auth.info.profile.usertype;
         if (auth.info.profile.approved) {
           if (role === 'rider') {
-            dispatch(api.fetchDrivers());
+            dispatch(api?.fetchDrivers());
             dispatch(api.fetchBookings(auth.info.uid, role));
             dispatch(api.fetchCancelReasons());
             dispatch(api.fetchPaymentMethods());

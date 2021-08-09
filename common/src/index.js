@@ -78,6 +78,7 @@ import {
     updateTripPickup,
     updateTripDrop,
     updateTripCar,
+    removedrop,
     updatSelPointType,
     clearTripPoints
 } from './actions/tripactions';
@@ -114,8 +115,8 @@ import {
     GetDistance,
     GetTripDistance
 } from './other/GeoFunctions';
-
 const FirebaseContext = createContext(null);
+
 
 const FirebaseProvider = ({ children }) => {
     let firebase = {
@@ -124,7 +125,6 @@ const FirebaseProvider = ({ children }) => {
         auth: null,
         storage: null
     }
-
     if (!app.apps.length) {
         app.initializeApp(FirebaseConfig);
         firebase = {
@@ -158,6 +158,7 @@ const FirebaseProvider = ({ children }) => {
             requestedDriversRef: (bookingKey) => app.database().ref("bookings/" + bookingKey + "/requestedDrivers"),
             walletBalRef: (uid) => app.database().ref("users/" + uid + "/walletBalance"),
             walletHistoryRef: (uid) => app.database().ref("users/" + uid + "/walletHistory"),
+            // updateImage: (uid) => app.database().ref("images/"+ima),
             referralIdRef: (referralId) => app.database().ref("users").orderByChild("referralId").equalTo(referralId),
             trackingRef: (bookingId) => app.database().ref('tracking/' + bookingId),
             tasksRef: () => app.database().ref('bookings').orderByChild('status').equalTo('NEW'),
@@ -195,7 +196,8 @@ const FirebaseProvider = ({ children }) => {
                 facebookSignIn: (token) => (dispatch) => facebookSignIn(token)(dispatch)(firebase),
                 appleSignIn: (credentialData) => (dispatch) => appleSignIn(credentialData)(dispatch)(firebase),
                 signOut: () => (dispatch) => signOut()(dispatch)(firebase),
-                updateProfile: (userAuthData, updateData) => (dispatch) => updateProfile(userAuthData, updateData)(dispatch)(firebase),
+                updateProfile: (userAuthData, updateData) => (dispatch) => updateProfile(userAuthData,
+                    updateData)(dispatch)(firebase),
                 monitorProfileChanges: () => (dispatch) => monitorProfileChanges()(dispatch)(firebase),
                 clearLoginError: () => (dispatch) => clearLoginError()(dispatch)(firebase),
                 addBooking: (bookingData) => (dispatch) => addBooking(bookingData)(dispatch)(firebase),
@@ -234,8 +236,11 @@ const FirebaseProvider = ({ children }) => {
                 clearMessage: () => (dispatch) => clearMessage()(dispatch)(firebase),
                 updateTripPickup: (pickupAddress) => (dispatch) => updateTripPickup(pickupAddress)(dispatch)(firebase),
                 updateTripDrop: (dropAddress) => (dispatch) => updateTripDrop(dropAddress)(dispatch)(firebase),
+                removedrop: dropAddress => dispatch => removedrop(dropAddress)(dispatch)(firebase),
                 updateTripCar: (selectedCar) => (dispatch) => updateTripCar(selectedCar)(dispatch)(firebase),
                 updatSelPointType: (selection) => (dispatch) => updatSelPointType(selection)(dispatch)(firebase),
+                //adnan additions
+                addinfinitestops: (selection) => (dispatch) => addinfinitestops(selection)(dispatch)(firebase),
                 clearTripPoints: () => (dispatch) => clearTripPoints()(dispatch)(firebase),
                 fetchTasks: () => (dispatch) => fetchTasks()(dispatch)(firebase),
                 acceptTask: (userAuthData, task) => (dispatch) => acceptTask(userAuthData, task)(dispatch)(firebase),

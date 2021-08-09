@@ -2,7 +2,8 @@ import {
   CONFIRM_BOOKING,
   CONFIRM_BOOKING_SUCCESS,
   CONFIRM_BOOKING_FAILED,
-  CLEAR_BOOKING
+  CLEAR_BOOKING,
+
 } from "../store/types";
 
 const INITIAL_STATE = {
@@ -10,12 +11,15 @@ const INITIAL_STATE = {
   loading: false,
   error: {
     flag: false,
-    msg: null
+    msg: null,
+    locations: [],
   }
 }
 
 export const bookingreducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+
+     
     case CONFIRM_BOOKING:
       return {
         ...state,

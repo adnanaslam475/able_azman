@@ -133,46 +133,41 @@ try {
 
   fs.writeFile('web-app/public/index.html', html, function (err) {
     if (err) throw err;
-    // console.log('Web App "index.html" Created!');
   });
 
   fs.writeFile('web-app/public/manifest.json', manifest, function (err) {
     if (err) throw err;
-    // console.log('Web Mani/fest Created!');
   });
 
   fs.writeFile('.firebaserc', firebaserc, function (err) {
     if (err) throw err;
-    // console.log('Firebase Config Created!');
   });
 
   fs.writeFile('mobile-app/app.json', appJson, function (err) {
     if (err) throw err;
-    // console.log('Mobile app.json Created!');
   });
 
 } catch (err) {
-  // console.error(err);
 }
 
-fs.copyFile("assets/favicon.ico", "web-app/public/favicon.ico", (err) => { err ? console.log("File Copy Error:", err) : console.log("Favicon copied successfully.") });
+fs.copyFile("assets/favicon.ico", "web-app/public/favicon.ico", (err) => { err ? console.log("File Copy Error:") : console.log("Favicon copied successfully.") });
 
-fs.copyFile("assets/logo72x72.png", "web-app/public/apple-icon.png", (err) => { err ? console.log("File Copy Error:", err) : console.log("Apple Icon copied successfully.") });
+fs.copyFile("assets/logo72x72.png", "web-app/public/apple-icon.png", (err) => { err ? console.log("File Copy Error:",) : console.log("Apple Icon copied successfully.") });
 
-fs.copyFile("assets/logo1024x1024.png", "mobile-app/assets/images/logo1024x1024.png", (err) => { err ? console.log("File Copy Error:", err) : console.log("App Icon copied successfully.") });
+fs.copyFile("assets/logo1024x1024.png", "mobile-app/assets/images/logo1024x1024.png", (err) => { err ? console.log("File Copy Error:") : console.log("App Icon copied successfully.") });
 
-fs.copyFile("assets/splash.png", "mobile-app/assets/images/splash.png", (err) => { err ? console.log("File Copy Error:", err) : console.log("App Splash copied successfully.") });
+fs.copyFile("assets/splash.png", "mobile-app/assets/images/splash.png", (err) => { err ? console.log("File Copy Error:") : console.log("App Splash copied successfully.") });
 
-fs.copyFile("assets/logo96x96.png", "mobile-app/assets/images/logo96x96.png", (err) => { err ? console.log("File Copy Error:", err) : console.log("Push Icon copied successfully.") });
+fs.copyFile("assets/logo96x96.png", "mobile-app/assets/images/logo96x96.png", (err) => { err ? console.log("File Copy Error:") : console.log("Push Icon copied successfully.") });
 
-fs.copyFile("assets/logo165x90white.png", "mobile-app/assets/images/logo165x90white.png", (err) => { err ? console.log("File Copy Error:", err) : console.log("App Menu Logo copied successfully.") });
+fs.copyFile("assets/logo165x90white.png", "mobile-app/assets/images/logo165x90white.png", (err) => { err ? console.log("File Copy Error:") : console.log("App Menu Logo copied successfully.") });
 
-fs.copyFile("assets/intro.jpg", "mobile-app/assets/images/intro.jpg", (err) => { err ? console.log("File Copy Error:", err) : console.log("Intro Image copied successfully.") });
+fs.copyFile("assets/intro.jpg", "mobile-app/assets/images/intro.jpg", (err) => { err ? console.log("File Copy Error:", ) : console.log("Intro Image copied successfully.") });
 
-fs.copyFile("assets/bg.jpg", "mobile-app/assets/images/bg.jpg", (err) => { err ? console.log("File Copy Error:", err) : console.log("Background Image copied successfully.") });
+fs.copyFile("assets/bg.jpg", "mobile-app/assets/images/bg.jpg", (err) => { err ? console.log("File Copy Error:", ) : console.log("Background Image copied successfully.") });
 
-fs.copyFile("config/google-services.json", "mobile-app/google-services.json", (err) => { err ? console.log("File Copy Error:", err) : console.log("google-services.json copied successfully.") });
+fs.copyFile("config/google-services.json", "mobile-app/google-services.json", (err) => { err ? console.log("File Copy Error:", ) : console.log("google-services.json copied successfully.") });
 
-fs.copyFile("config/GoogleService-Info.plist", "mobile-app/GoogleService-Info.plist", (err) => { err ? console.log("File Copy Error:", err) : console.log("GoogleService-Info.plist copied successfully.") });
+fs.copyFile("config/GoogleService-Info.plist", "mobile-app/GoogleService-Info.plist", (err) => { err ? console.log("File Copy Error:") : console.log("GoogleService-Info.plist copied successfully.") });
 
-fs.copyFile("config/language.json", "functions/language.json", (err) => { err ? console.log("File Copy Error:", err) : console.log("Language file copied successfully.") });
+fs.copyFile("config/language.json", "functions/language.json", (err) => { err ? console.log("File Copy Error:", ) : console.log("Language file copied successfully.") });

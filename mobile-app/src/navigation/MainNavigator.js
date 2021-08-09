@@ -21,7 +21,9 @@ import {
     IntroScreen,
     DriverTrips,
     WithdrawMoneyScreen,
-    DriverIncomeScreen
+    DriverIncomeScreen,
+    InfiniteDrops,
+
 } from '../screens';
 import SideMenu from '../components/SideMenu';
 
@@ -43,7 +45,7 @@ export const AppStack = {
         screen: DriverTrips,
         navigationOptions: {
             headerShown: false
-        }     
+        }
     },
     Profile: {
         screen: ProfileScreen,
@@ -81,7 +83,7 @@ export const AppStack = {
             headerShown: false
         }
     },
-    MyEarning:{
+    MyEarning: {
         screen: DriverIncomeScreen,
         navigationOptions: {
             headerShown: false
@@ -93,13 +95,18 @@ export const AppStack = {
             headerShown: false,
         }
     },
+    InfiniteDrops: {
+        screen: InfiniteDrops,
+        navigationOptions: {
+            headerShown: false,
+        }
+    },
     RideDetails: {
         screen: RideDetails,
         navigationOptions: {
             headerShown: false
         }
     },
-
     Search: {
         screen: SearchScreen,
         navigationOptions: {
@@ -221,11 +228,8 @@ export const DriverRootNavigator = createDrawerNavigator(
         contentComponent: SideMenu,
     });
 
-export const AdminRootNavigator = createDrawerNavigator(
-    DrawerRoutes,
-    {
-        drawerWidth: 180,
-        initialRouteName: 'About',
-        contentComponent: SideMenu,
-    });
-    
+export const AdminRootNavigator = createDrawerNavigator(DrawerRoutes, {
+    drawerWidth: 180,
+    initialRouteName: 'About',
+    contentComponent: SideMenu,
+});

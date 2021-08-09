@@ -1,10 +1,11 @@
-import React,{useContext} from 'react';
-import { Text, 
-    View, 
-    Dimensions, 
-    StyleSheet, 
-    FlatList, 
-    Image, 
+import React, { useContext } from 'react';
+import {
+    Text,
+    View,
+    Dimensions,
+    StyleSheet,
+    FlatList,
+    Image,
     TouchableOpacity,
     Linking,
     Alert,
@@ -23,7 +24,7 @@ import { FirebaseContext } from 'common/src';
 
 const LOCATION_TASK_NAME = 'background-location-task';
 
-export default function SideMenu(props){
+export default function SideMenu(props) {
 
     const { api } = useContext(FirebaseContext);
     const { signOut } = api;
@@ -33,23 +34,23 @@ export default function SideMenu(props){
     const settings = useSelector(state => state.settingsdata.settings);
 
     const sideMenuList = [
-        {name: language.book_your_ride_menu, navigationName: 'Map', icon: 'home', type: 'font-awesome'},
-        {name: language.booking_request, navigationName: 'DriverTrips', icon: 'home', type: 'font-awesome'},
-        {name: language.my_rides_menu, navigationName: 'RideList', icon: 'car-sports', type: 'material-community'},
-        {name: language.incomeText, navigationName: 'MyEarning', icon: 'md-wallet', type: 'ionicon'},
-        {name: language.my_wallet_menu, icon: 'account-balance-wallet', navigationName: 'wallet', type: 'MaterialIcons'},
-        {name: language.profile_setting_menu, navigationName: 'Profile', icon: 'ios-person-add', type: 'ionicon'},
-        {name: language.about_us_menu, navigationName: 'About', icon: 'info', type: 'entypo'},
-        {name: language.emergency, navigationName: 'Emergency', icon: 'ios-sad', type: 'ionicon'},
-        {name: language.logout, icon: 'sign-out',navigationName: 'Logout', type: 'font-awesome'}
+        { name: language.book_your_ride_menu, navigationName: 'Map', icon: 'home', type: 'font-awesome' },
+        { name: language.booking_request, navigationName: 'DriverTrips', icon: 'home', type: 'font-awesome' },
+        { name: language.my_rides_menu, navigationName: 'RideList', icon: 'car-sports', type: 'material-community' },
+        { name: language.incomeText, navigationName: 'MyEarning', icon: 'md-wallet', type: 'ionicon' },
+        { name: language.my_wallet_menu, icon: 'account-balance-wallet', navigationName: 'wallet', type: 'MaterialIcons' },
+        { name: language.profile_setting_menu, navigationName: 'Profile', icon: 'ios-person-add', type: 'ionicon' },
+        { name: language.about_us_menu, navigationName: 'About', icon: 'info', type: 'entypo' },
+        { name: language.emergency, navigationName: 'Emergency', icon: 'ios-sad', type: 'ionicon' },
+        { name: language.logout, icon: 'sign-out', navigationName: 'Logout', type: 'font-awesome' }
     ];
 
 
     const StopBackgroundLocation = async () => {
-        TaskManager.getRegisteredTasksAsync().then((res)=>{
-            if(res.length>0){
-                for(let i=0;i<res.length;i++){
-                    if(res[i].taskName == LOCATION_TASK_NAME){
+        TaskManager.getRegisteredTasksAsync().then((res) => {
+            if (res.length > 0) {
+                for (let i = 0; i < res.length; i++) {
+                    if (res[i].taskName == LOCATION_TASK_NAME) {
                         Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
                         break;
                     }
@@ -74,47 +75,47 @@ export default function SideMenu(props){
                 return Linking.openURL(call_link);
             } else {
             }
-        }).catch(err => console.error('An error occurred', err));
+        }).catch(err => { });
     }
 
     //sign out 
     logOff = () => {
-        auth.info && auth.info.profile && auth.info.profile.usertype == 'driver'?  StopBackgroundLocation():null;
+        auth.info && auth.info.profile && auth.info.profile.usertype == 'driver' ? StopBackgroundLocation() : null;
         AsyncStorage.removeItem('firstRun');
-        props.navigation.navigate('Intro',{fromLogout:true});
+        props.navigation.navigate('Intro', { fromLogout: true });
         dispatch(signOut());
     }
 
     return (
         <View style={styles.mainViewStyle}>
-            {auth.info && auth.info.profile?
+            {auth.info && auth.info.profile ?
                 <SideMenuHeader headerStyle={styles.myHeader} userPhoto={auth.info.profile.profile_image} userEmail={auth.info.profile.email} userName={auth.info.profile.firstName + ' ' + auth.info.profile.lastName} ></SideMenuHeader>
-            :null}
+                : null}
             <View style={styles.compViewStyle}>
                 <View style={[styles.vertialLine, { height: (width <= 320) ? width / 1.53 : width / 1.68 }]}></View>
-                {!!settings?
-                <FlatList
-                    data={sideMenuList}
-                    keyExtractor={(item, index) => index.toString()}
-                    style={{ marginTop: 20 }}
-                    bounces={false}
-                    renderItem={({ item, index }) => {
-                        if (auth.info.profile.usertype == 'admin' && item.navigationName != 'About'  && item.navigationName != 'Logout' ) {
-                            return null;
-                        }   
-                        if (auth.info.profile.usertype == 'fleetadmin' && item.navigationName != 'About'  && item.navigationName != 'Logout' ) {
-                            return null;
-                        }   
-                        if (auth.info.profile.usertype == 'rider' && (item.navigationName == 'DriverTrips' || item.navigationName == 'MyEarning')) {
-                            return null;
-                        }       
-                        else if (auth.info.profile.usertype == 'driver' && ( item.navigationName == 'Map' || item.navigationName == 'Emergency')) {
-                            return null;
-                        } 
-                        else if (auth.info.profile.usertype == 'rider' && item.navigationName == 'Emergency'  ) {
-                            return(
-                                <TouchableOpacity
-                                    onPress={()=> {
+                {!!settings ?
+                    <FlatList
+                        data={sideMenuList}
+                        keyExtractor={(item, index) => index.toString()}
+                        style={{ marginTop: 20 }}
+                        bounces={false}
+                        renderItem={({ item, index }) => {
+                            if (auth.info.profile.usertype == 'admin' && item.navigationName != 'About' && item.navigationName != 'Logout') {
+                                return null;
+                            }
+                            if (auth.info.profile.usertype == 'fleetadmin' && item.navigationName != 'About' && item.navigationName != 'Logout') {
+                                return null;
+                            }
+                            if (auth.info.profile.usertype == 'rider' && (item.navigationName == 'DriverTrips' || item.navigationName == 'MyEarning')) {
+                                return null;
+                            }
+                            else if (auth.info.profile.usertype == 'driver' && (item.navigationName == 'Map' || item.navigationName == 'Emergency')) {
+                                return null;
+                            }
+                            else if (auth.info.profile.usertype == 'rider' && item.navigationName == 'Emergency') {
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
                                             Alert.alert(
                                                 language.panic_text,
                                                 language.panic_question,
@@ -132,48 +133,48 @@ export default function SideMenu(props){
                                                 { cancelable: false }
                                             )
                                         }
-                                    }
-                                    style={
-                                        [styles.menuItemView, { marginTop: (index == sideMenuList.length - 1) ? width / 7 : 0 }]
-                                    }>
-                                    <View style={styles.viewIcon}>
-                                        <Icon
-                                            name={item.icon}
-                                            type={item.type}
-                                            color={colors.WHITE}
-                                            size={16}
-                                            containerStyle={styles.iconStyle}
-                                        />
-                                    </View>
-                                    <Text style={styles.menuName}>{item.name}</Text>
-                                </TouchableOpacity>
-                                )                           
-                        }else{
-                            return(
-                            <TouchableOpacity
-                                onPress={
-                                    (item.name == language.logout) ? () => logOff() :
-                                        navigateToScreen(item.navigationName)
-                                }
-                                style={
-                                    [styles.menuItemView, { marginTop: (index == sideMenuList.length - 1) ? width / 7 : 0 }]
-                                }>
-                                <View style={styles.viewIcon}>
-                                    <Icon
-                                        name={item.icon}
-                                        type={item.type}
-                                        color={colors.WHITE}
-                                        size={16}
-                                        containerStyle={styles.iconStyle}
-                                    />
-                                </View>
-                                <Text style={styles.menuName}>{item.name}</Text>
-                            </TouchableOpacity>
-                            )
+                                        }
+                                        style={
+                                            [styles.menuItemView, { marginTop: (index == sideMenuList.length - 1) ? width / 7 : 0 }]
+                                        }>
+                                        <View style={styles.viewIcon}>
+                                            <Icon
+                                                name={item.icon}
+                                                type={item.type}
+                                                color={colors.WHITE}
+                                                size={16}
+                                                containerStyle={styles.iconStyle}
+                                            />
+                                        </View>
+                                        <Text style={styles.menuName}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )
+                            } else {
+                                return (
+                                    <TouchableOpacity
+                                        onPress={
+                                            (item.name == language.logout) ? () => logOff() :
+                                                navigateToScreen(item.navigationName)
+                                        }
+                                        style={
+                                            [styles.menuItemView, { marginTop: (index == sideMenuList.length - 1) ? width / 7 : 0 }]
+                                        }>
+                                        <View style={styles.viewIcon}>
+                                            <Icon
+                                                name={item.icon}
+                                                type={item.type}
+                                                color={colors.WHITE}
+                                                size={16}
+                                                containerStyle={styles.iconStyle}
+                                            />
+                                        </View>
+                                        <Text style={styles.menuName}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )
+                            }
                         }
-                    }
-                    } />
-                :null}
+                        } />
+                    : null}
             </View>
             <View style={{ opacity: 0.6 }}>
                 <Image
@@ -184,7 +185,7 @@ export default function SideMenu(props){
 
         </View>
     )
-    
+
 }
 const styles = StyleSheet.create({
     myHeader: {

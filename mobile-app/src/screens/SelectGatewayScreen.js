@@ -27,12 +27,12 @@ export default function SelectGatewayPage(props) {
   });
 
   const paymentmethods = useSelector(state => state.paymentmethods);
-  useEffect(()=>{
-    if(paymentmethods.message){
-      Alert.alert(language.alert,paymentmethods.message);
+  useEffect(() => {
+    if (paymentmethods.message) {
+      Alert.alert(language.alert, paymentmethods.message);
       dispatch(clearMessage());
     }
-  },[paymentmethods.message]);
+  }, [paymentmethods.message]);
 
 
   const onSuccessHandler = (order_details) => {
@@ -40,10 +40,10 @@ export default function SelectGatewayPage(props) {
       let curBooking = { ...state.booking };
       curBooking.status = 'PAID';
       curBooking.gateway = order_details.gateway,
-      curBooking.transaction_id = order_details.transaction_id,
-      dispatch(updateBooking(curBooking));
-      
-      if(state.booking.usedWalletMoney>0){
+        curBooking.transaction_id = order_details.transaction_id,
+        dispatch(updateBooking(curBooking));
+
+      if (state.booking.usedWalletMoney > 0) {
         let walletBalance = state.userdata.walletBalance - state.booking.usedWalletMoney;
         let tDate = new Date();
         let details = {
@@ -53,10 +53,10 @@ export default function SelectGatewayPage(props) {
           txRef: state.booking.id,
           transaction_id: state.booking.id
         }
-        dispatch(updateWalletBalance(walletBalance,details));
+        dispatch(updateWalletBalance(walletBalance, details));
       }
       setTimeout(() => {
-        props.navigation.navigate('DriverRating',{booking:curBooking});
+        props.navigation.navigate('DriverRating', { booking: curBooking });
       }, 3000);
     } else {
       let walletBalance = state.userdata.walletBalance + parseInt(state.payData.amount);
@@ -69,7 +69,7 @@ export default function SelectGatewayPage(props) {
         gateway: order_details.gateway,
         transaction_id: order_details.transaction_id
       }
-      dispatch(updateWalletBalance(walletBalance,details));
+      dispatch(updateWalletBalance(walletBalance, details));
       setTimeout(() => {
         props.navigation.navigate('wallet')
       }, 3000);
@@ -79,7 +79,7 @@ export default function SelectGatewayPage(props) {
   onCanceledHandler = () => {
     if (state.userdata.paymentType) {
       setTimeout(() => {
-        props.navigation.navigate('PaymentDetails',{booking:booking})
+        props.navigation.navigate('PaymentDetails', { booking: booking })
       }, 5000)
     } else {
       setTimeout(() => {
@@ -101,28 +101,31 @@ export default function SelectGatewayPage(props) {
     <View style={styles.container}>
       <Header
         backgroundColor={colors.GREY.default}
-        leftComponent={{ icon: 'ios-arrow-back', type: 'ionicon', color: colors.WHITE, size: 30, component: TouchableWithoutFeedback, onPress: () => { goBack() } }}
+        leftComponent={{
+          icon: 'ios-arrow-back', type: 'ionicon',
+          color: colors.WHITE,
+          size: 30, component: TouchableWithoutFeedback, onPress: () => { goBack() }
+        }}
         centerComponent={<Text style={styles.headerTitleStyle}>{language.payment}</Text>}
         containerStyle={styles.headerStyle}
         innerContainerStyles={{ marginLeft: 10, marginRight: 10 }}
       />
       {state.selectedProvider ? <PaymentWebView provider={state.selectedProvider} payData={state.payData} onSuccess={onSuccessHandler} onCancel={onCanceledHandler} /> : null}
       {state.providers && state.selectedProvider == null ?
-        <ScrollView>
-          {
-            state.providers.map((provider) => {
-              return (
-                <View style={[styles.box, { marginTop: 6 }]} key={provider.name}>
-                  <TouchableHighlight onPress={selectProvider.bind(this, provider)} underlayColor={colors.BLUE.light}>
-                    <Image
-                      style={styles.thumb}
-                      source={{ uri: provider.image }}
-                    />
-                  </TouchableHighlight>
-                </View>
-              );
-            })
-          }
+        <ScrollView>    {
+          state.providers.map((provider) => {
+            return (
+              <View style={[styles.box, { marginTop: 6 }]} key={provider.name}>
+                <TouchableHighlight onPress={selectProvider.bind(this, provider)} underlayColor={colors.BLUE.light}>
+                  <Image
+                    style={styles.thumb}
+                    source={{ uri: provider.image }}
+                  />
+                </TouchableHighlight>
+              </View>
+            );
+          })
+        }
         </ScrollView>
         : null
       }

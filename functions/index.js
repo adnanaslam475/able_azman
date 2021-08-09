@@ -251,18 +251,18 @@ exports.check_user_exists = functions.https.onRequest((request, response) => {
         if (request.body.mobile) {
             arr.push({ phoneNumber: request.body.mobile });
         }
-        try{
+        try {
             admin
-            .auth()
-            .getUsers(arr)
-            .then((getUsersResult) => {
-                response.send({ users: getUsersResult.users });
-                return true;
-            })
-            .catch((error) => {
-                response.send({ error: error });
-            });
-        }catch(error){
+                .auth()
+                .getUsers(arr)
+                .then((getUsersResult) => {
+                    response.send({ users: getUsersResult.users });
+                    return true;
+                })
+                .catch((error) => {
+                    response.send({ error: error });
+                });
+        } catch (error) {
             response.send({ error: error });
         }
     } else {
@@ -277,22 +277,22 @@ exports.validate_referrer = functions.https.onRequest(async (request, response) 
     response.set("Access-Control-Allow-Headers", "Content-Type");
     const snapshot = await admin.database().ref("users").once('value');
     let value = snapshot.val();
-    if(value){
+    if (value) {
         let arr = Object.keys(value);
         let key;
-        for(let i=0; i < arr.length; i++){
-            if(value[arr[i]].referralId === referralId){
+        for (let i = 0; i < arr.length; i++) {
+            if (value[arr[i]].referralId === referralId) {
                 key = arr[i];
             }
         }
-        response.send({uid: key}); 
-    }else{
-        response.send({uid: null});
+        response.send({ uid: key });
+    } else {
+        response.send({ uid: null });
     }
 });
 
-const addToWallet = async (uid,amount) =>{
-    let snapshot =  await admin.database().ref("users/" + uid).once("value");
+const addToWallet = async (uid, amount) => {
+    let snapshot = await admin.database().ref("users/" + uid).once("value");
     if (snapshot.val()) {
         let walletBalance = snapshot.val().walletBalance;
         walletBalance = walletBalance + amount;
@@ -304,11 +304,11 @@ const addToWallet = async (uid,amount) =>{
         }
         await admin.database().ref("users/" + uid + "/walletBalance").set(walletBalance);
         await admin.database().ref("users/" + uid + "/walletHistory").push(details);
-        if(snapshot.val().pushToken){
+        if (snapshot.val().pushToken) {
             RequestPushMsg(snapshot.val().pushToken, language.notification_title, language.wallet_updated);
-        }  
+        }
         return true;
-    }else{
+    } else {
         return false;
     }
 }
@@ -328,7 +328,10 @@ exports.user_signup = functions.https.onRequest(async (request, response) => {
             referralId: userDetails.firstName.toLowerCase() + Math.floor(1000 + Math.random() * 9000).toString(),
             approved: true,
             walletBalance: 0,
-            pushToken: 'init'
+            pushToken: 'init',
+            drivinglicense_img: '',
+            idcard_image: '',
+            passenger_id_passImg: ''
         };
         let settingdata = await admin.database().ref('settings').once("value");
         let settings = settingdata.val();
@@ -347,23 +350,23 @@ exports.user_signup = functions.https.onRequest(async (request, response) => {
             if (settings.driver_approval) {
                 regData.approved = false;
             }
-        } 
+        }
         let userRecord = await admin.auth().createUser({
             email: userDetails.email,
             phoneNumber: userDetails.mobile,
             password: userDetails.password,
             emailVerified: settings.email_verify ? false : true
         });
-        if(userRecord && userRecord.uid){
-            if(userDetails.signupViaReferral){
+        if (userRecord && userRecord.uid) {
+            if (userDetails.signupViaReferral) {
                 await addToWallet(userDetails.signupViaReferral, settings.bonus);
             }
             await admin.database().ref('users/' + userRecord.uid).set(regData);
             response.send({ uid: userRecord.uid });
-        }else{
+        } else {
             response.send({ error: "User Not Created" });
         }
-    }catch(error){
+    } catch (error) {
         response.send({ error: "User Not Created" });
     }
 });

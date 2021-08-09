@@ -19,6 +19,7 @@ import IntroScreen from './IntroScreen';
 import DriverTrips from './DriverTrips';
 import WithdrawMoneyScreen from './WithdrawMoney';
 import DriverIncomeScreen from './DriverIncomeScreen';
+import InfiniteDrops from './InfiniteDrops';
 
 export {
     MapScreen,
@@ -26,6 +27,7 @@ export {
     BookedCabScreen,
     DriverRating,
     RegistrationPage,
+    InfiniteDrops,
     RideListPage,
     ProfileScreen,
     RideDetails,

@@ -286,7 +286,9 @@ export const facebookSignIn = (token) => (dispatch) => (firebase) => {
               mobile: user.additionalUserInfo.profile.phoneNumber ? user.additionalUserInfo.profile.phoneNumber : ' ',
               email: user.additionalUserInfo.profile.email ? user.additionalUserInfo.profile.email : ' ',
               usertype: 'rider',
-              referralId: (user.additionalUserInfo.profile.first_name ? user.additionalUserInfo.profile.first_name.toLowerCase() : 'temp') + Math.floor(1000 + Math.random() * 9000).toString(),
+              referralId: (user.additionalUserInfo.profile.first_name ?
+                user.additionalUserInfo.profile.first_name.toLowerCase() : 'temp') +
+                Math.floor(1000 + Math.random() * 9000).toString(),
               approved: true,
               walletBalance: 0,
               loginType: 'facebook'

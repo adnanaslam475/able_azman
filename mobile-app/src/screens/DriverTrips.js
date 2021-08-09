@@ -42,7 +42,7 @@ export default function DriverTrips(props) {
     const onPressAccept = (item) => {
         let wallet_balance = parseFloat(auth.info.profile.walletBalance);
         if (wallet_balance >= 0) {
-            if (wallet_balance == 0){
+            if (wallet_balance == 0) {
                 Alert.alert(
                     language.alert,
                     language.wallet_balance_zero
@@ -156,8 +156,8 @@ export default function DriverTrips(props) {
                                     <Text style={styles.rateViewTextStyle}>{settings.symbol}{item ? item.estimate > 0 ? parseFloat(item.estimate).toFixed(2) : 0 : null}</Text>
                                 </View>
                                 <View style={styles.estimateView}>
-                                    <Text style={styles.listEstimate}>{item.estimateDistance? (item.estimateDistance/1000).toFixed(1): 0} {language.km}</Text>
-                                    <Text style={styles.listEstimate}>{item.estimateTime? (item.estimateTime/60).toFixed(0): 0} {language.mins}</Text>
+                                    <Text style={styles.listEstimate}>{item.estimateDistance ? (item.estimateDistance / 1000).toFixed(1) : 0} {language.km}</Text>
+                                    <Text style={styles.listEstimate}>{item.estimateTime ? (item.estimateTime / 60).toFixed(0) : 0} {language.mins}</Text>
                                 </View>
                                 <View style={styles.addressViewStyle}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -360,16 +360,16 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         color: colors.GREY.default,
         flex: 1,
-        alignSelf:'center'
+        alignSelf: 'center'
     },
-    estimateView:{
+    estimateView: {
         flex: 1.1,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-around',
-        marginBottom:10
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginBottom: 10
     },
-    listEstimate:{
+    listEstimate: {
         fontSize: 20,
         color: colors.GREY.secondary,
     },
@@ -504,8 +504,8 @@ const styles = StyleSheet.create({
     rateViewStyle: {
         alignItems: 'center',
         flex: 2,
-        marginTop:10,
-        marginBottom:10
+        marginTop: 10,
+        marginBottom: 10
     },
     rateViewTextStyle: {
         fontSize: 50,

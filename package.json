@@ -29,6 +29,7 @@
     "cloudinary": "^1.26.2",
     "concurrently": "^5.3.0",
     "fs-extra": "^9.0.1",
-    "node-sass": "^6.0.1"
+    "node-sass": "^6.0.1",
+    "react-native-web": "^0.17.1"
   }
 }
