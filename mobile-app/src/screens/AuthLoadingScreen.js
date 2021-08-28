@@ -40,19 +40,19 @@ export default function AuthLoadingScreen(props) {
           }
           else {
             Alert.alert(language.alert, language.not_valid_user_type);
-            dispatch(api?.signOut());
+            api.signOut() && dispatch(api?.signOut());
             props.navigation.navigate('Intro');
           }
         }
         else {
           Alert.alert(language.alert, language.require_approval);
-          dispatch(api?.signOut());
+          api.signOut() && dispatch(api?.signOut());
           props.navigation.navigate('Intro');
         }
       } else {
         Alert.alert(language.alert,
           language.user_issue_contact_admin);
-        dispatch(api?.signOut());
+        api.signOut() && dispatch(api?.signOut());
         props.navigation.navigate('Intro');
       }
     }

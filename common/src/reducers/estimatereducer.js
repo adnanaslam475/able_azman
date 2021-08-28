@@ -22,6 +22,7 @@ export const estimatereducer = (state = INITIAL_STATE, action) => {
         loading: true
       };
     case FETCH_ESTIMATE_SUCCESS:
+      // console.log('suceess25', action.payload)
       return {
         ...state,
         estimate: action.payload,

@@ -9,6 +9,7 @@ import {
     Platform,
     TouchableWithoutFeedback, Alert
 } from 'react-native';
+import lodash from 'lodash';
 import { Icon, Button, Header } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { colors } from '../common/theme';
@@ -34,8 +35,7 @@ export default function FareScreen(props) {
     const mapRef = useRef(null);
 
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    // console.log('line37----->', tripdata.infinite_drops);
-    console.log('line37----->', estimate.estimateFare);
+    // console.log('line37----->', estimate.estimateFare);
 
     const onPressCancel = () => {
         setButtonDisabled(false);
@@ -51,7 +51,10 @@ export default function FareScreen(props) {
                 latitude: tripdata.drop.lat,
                 longitude: tripdata.drop.lng
             }], {
-                edgePadding: { top: 40, right: 40, bottom: 40, left: 40 },
+                edgePadding: {
+                    top: 40, right: 40,
+                    bottom: 40, left: 40
+                },
                 animated: true,
             });
         }, 1000);
@@ -169,7 +172,6 @@ export default function FareScreen(props) {
                                 strokeColor={colors.BLUE.default}
                             />
                             : null}
-
                     </MapView>
                     : null}
             </View>
@@ -194,11 +196,10 @@ export default function FareScreen(props) {
                                 containerStyle={styles.infoIcon}
                             />
                         </View>
-
                         <View style={styles.iconContainer}>
                             <Text style={styles.priceText}>
                                 {settings ? settings.symbol : null}
-                                {estimate ? estimate.estimateFare : null}
+                                {estimate ? lodash.sum(estimate.arr).toFixed(2) : null}
                             </Text>
                         </View>
                     </View>

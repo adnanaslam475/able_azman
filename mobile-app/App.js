@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import AppContainer from './src/navigation/AppNavigator';
 import * as Notifications from 'expo-notifications';
 import * as Updates from 'expo-updates';
+
 import {
   ActivityIndicator,
   StyleSheet,
@@ -63,7 +64,8 @@ export default function App() {
       _loadResourcesAsync().then(() => {
         setAssetsLoaded(true);
       });
-    } else {
+    }
+    else {
       try {
         setUpdateMsg(language.checking_updates);
         const update = await Updates.checkForUpdateAsync();
@@ -78,6 +80,7 @@ export default function App() {
           });
         }
       } catch (e) {
+        console.log('err82', e)
       }
     }
   }

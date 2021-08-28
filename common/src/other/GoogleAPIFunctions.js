@@ -1,7 +1,8 @@
 import { Google_Map_Key } from 'config';
 
 export const fetchCoordsfromPlace = async (place_id) => {
-    const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?place_id=' + place_id + '&key=' + Google_Map_Key);
+    const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?place_id='
+        + place_id + '&key=' + Google_Map_Key);
     const json = await response.json();
     if (json.results && json.results.length > 0 && json.results[0].geometry) {
         let coords = json.results[0].geometry.location;
@@ -11,7 +12,8 @@ export const fetchCoordsfromPlace = async (place_id) => {
 }
 
 export const fetchAddressfromCoords = async (latlng) => {
-    const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + Google_Map_Key)
+    const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='
+        + latlng + '&key=' + Google_Map_Key)
     const json = await response.json();
     if (json.results && json.results.length > 0 && json.results[0].formatted_address) {
         return json.results[0].formatted_address;
@@ -20,22 +22,23 @@ export const fetchAddressfromCoords = async (latlng) => {
 }
 
 export const getRouteDetails = async (platform, startLoc, destLoc) => {
+    console.log('inroutedetail25->', startLoc, destLoc)
     let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destLoc}&key=${Google_Map_Key}`
     let cors_proxy = 'https://cors-proxy.dev.exicube.com/';
-    url = platform == 'web'? cors_proxy + url : url;
+    url = platform == 'web' ? cors_proxy + url : url;
     let response = await fetch(url)
     let json = await response.json();
     if (json.routes && json.routes.length > 0) {
         return {
-            distance:json.routes[0].legs[0].distance.value,
-            duration:json.routes[0].legs[0].duration.value,
-            polylinePoints:json.routes[0].overview_polyline.points
+            distance: json.routes[0].legs[0].distance.value,
+            duration: json.routes[0].legs[0].duration.value,
+            polylinePoints: json.routes[0].overview_polyline.points
         }
     }
     return null;
 }
 
-export const getDriveTime = (startLoc, destLoc) =>{
+export const getDriveTime = (startLoc, destLoc) => {
     return new Promise(function (resolve, reject) {
         fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${startLoc}&destinations=${destLoc}&key=${Google_Map_Key}`)
             .then((response) => response.json())

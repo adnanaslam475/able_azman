@@ -347,7 +347,7 @@ export default function MapScreen(props) {
     //Go to confirm booking page
     const onPressBook = () => {
         if (tripdata.pickup && tripdata?.drop && tripdata?.drop.add) {
-            console.log('here in mapscreen---------->', tripdata.infinite_drops)
+            // console.log('here in mapscreen---------->', tripdata.infinite_drops)
             if (!tripdata.carType) {
                 Alert.alert(language.alert, language.car_type_blank_error)
             } else {
@@ -547,7 +547,7 @@ export default function MapScreen(props) {
                             tripdata.selected == 'drop' ? { fontSize: 20 } :
                                 { fontSize: 14 }]}>{tripdata?.drop &&
                                     tripdata?.drop.add ?
-                                    tripdata?.infinite_drops[tripdata.infinite_drops?.length - 1].add :
+                                    tripdata?.infinite_drops[tripdata.infinite_drops?.length - 1]?.add :
                                     language.map_screen_drop_input_text}</Text>
                             <Icon
                                 name='search'
