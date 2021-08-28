@@ -98,44 +98,6 @@ export default function EditProfilePage(props) {
     }
 
 
-    const imageHandler = async name => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            aspect: [4, 3],
-            quality: 1.0,
-        });
-        if (!result.cancelled) {
-            const blob = await new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    resolve(xhr.response);
-                };
-                xhr.onerror = function () {
-                    reject(new TypeError("Network request failed"));
-                };
-                xhr.responseType = "blob";
-                xhr.open("GET", result.uri, true);
-                xhr.send(null);
-            });
-            const ref = app.storage().ref('images');
-            const snapshot = await ref.put(blob, {
-                contentType: "image/png"
-            });
-            const remoteURL = await snapshot.ref.getDownloadURL();
-            switch (name) {
-                case 'idcard':
-                    setidcard_image(remoteURL)
-                    break;
-                case 'license':
-                    setdrivinglicense_img(remoteURL);
-                    break;
-                case 'id_pass':
-                    set_passenger_id_passImg(remoteURL)
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
 
     return (
@@ -253,24 +215,28 @@ export default function EditProfilePage(props) {
                             alignItems: 'center'
                         }}>
                             {auth.info.profile.idcard_image || idcard_image ?
-                                <TouchableOpacity onPress={() => imageHandler('idcard')} >
+                                <TouchableOpacity onPress={() => ''} >
+                                    {/* imageHandler('idcard') */}
                                     <Image
                                         style={{ ...styles.img, marginRight: 10 }}
                                         source={{ uri: idcard_image || auth.info.profile.idcard_image }} />
                                 </TouchableOpacity> :
                                 <Button titleStyle={styles.buttonTitle}
-                                    onPress={() => imageHandler('idcard')}
+                                    onPress={() => ''}
+                                        //  imageHandler('idcard')
                                     title='Upload Id card'
                                     buttonStyle={{ ...styles.registerButton, width: width * 0.3 }} />}
                             {auth.info.profile.drivinglicense_img || drivinglicense_img ?
-                                <TouchableOpacity onPress={() => imageHandler('license')}>
+                                <TouchableOpacity onPress={() => ''}>
+                                    {/* imageHandler('license') */}
                                     <Image source={{
                                         uri: drivinglicense_img ||
                                             auth.info.profile.drivinglicense_img
                                     }}
                                         style={styles.img} /></TouchableOpacity> :
                                 <Button titleStyle={styles.buttonTitle}
-                                    onPress={() => imageHandler('license')}
+                                    onPress={() => ''}
+                                    // imageHandler('license')
                                     title='Upload Driving license /psv'
                                     buttonStyle={{
                                         ...styles.registerButton,
