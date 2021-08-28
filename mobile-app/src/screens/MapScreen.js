@@ -28,7 +28,6 @@ import 'firebase/database';
 import 'firebase/auth';
 import { NavigationEvents } from 'react-navigation';
 import { store, FirebaseContext } from 'common/src';
-// import { addinfinitestops } from 'common/src/actions/tripactions';
 
 export default function MapScreen(props) {
     const { api } = useContext(FirebaseContext);
@@ -71,7 +70,7 @@ export default function MapScreen(props) {
     const [region, setRegion] = useState(null);
     const [regions, setRegions] = useState([]);
     const pageActive = useRef(false);
-    const adresref = useRef(null);
+
 
     useEffect(() => {
         if (cars) {
@@ -348,6 +347,7 @@ export default function MapScreen(props) {
     //Go to confirm booking page
     const onPressBook = () => {
         if (tripdata.pickup && tripdata?.drop && tripdata?.drop.add) {
+            console.log('here in mapscreen---------->', tripdata.infinite_drops)
             if (!tripdata.carType) {
                 Alert.alert(language.alert, language.car_type_blank_error)
             } else {
@@ -375,6 +375,7 @@ export default function MapScreen(props) {
                             description: tripdata?.drop.add
                         },
                         carDetails: tripdata.carType,
+                        drops: tripdata?.infinite_drops,
                     }));
                 } else {
                     Alert.alert(language.alert, language.no_driver_found_alert_messege);
@@ -433,15 +434,8 @@ export default function MapScreen(props) {
             setTimeout(() => {
                 const diffMins = MinutesPassed(date);
                 if (diffMins < 15) {
-                    Alert.alert(
-                        language.alert,
-                        language.past_booking_error,
-                        [
-
-                            { text: "OK", onPress: () => { } }
-                        ],
-                        { cancelable: true }
-                    );
+                    Alert.alert(language.alert, language.past_booking_error,
+                        [{ text: "OK", onPress: () => { } }], { cancelable: true });
                 } else {
                     dispatch(getEstimate({
                         bookLater: true,
@@ -460,6 +454,7 @@ export default function MapScreen(props) {
                             }, description: tripdata?.drop.add
                         },
                         carDetails: tripdata.carType,
+                        drops: tripdata?.infinite_drops,
                     }));
                 }
             }, 1000);
@@ -496,6 +491,7 @@ export default function MapScreen(props) {
         )
     }
 
+
     return (
         <View style={styles.mainViewStyle}>
             <NavigationEvents
@@ -511,7 +507,6 @@ export default function MapScreen(props) {
                 }}
             />
             <Header
-                // backgroundColor={colors.GREY.default}
                 leftComponent={{
                     icon: 'md-menu', type: 'ionicon',
                     color: colors.WHITE, size: 30, component: TouchableWithoutFeedback,
@@ -551,7 +546,8 @@ export default function MapScreen(props) {
                             <Text numberOfLines={1} style={[styles.textStyle,
                             tripdata.selected == 'drop' ? { fontSize: 20 } :
                                 { fontSize: 14 }]}>{tripdata?.drop &&
-                                    tripdata?.drop.add ? tripdata?.drop.add :
+                                    tripdata?.drop.add ?
+                                    tripdata?.infinite_drops[tripdata.infinite_drops?.length - 1].add :
                                     language.map_screen_drop_input_text}</Text>
                             <Icon
                                 name='search'
@@ -568,8 +564,6 @@ export default function MapScreen(props) {
                         zIndex: 20, display: 'flex',
                         flexDirection: 'row', color: 'white'
                     }}>
-                        {/* <Text style={{ color: 'white' }}>You have added {tripdata.infinite_drops?.length == 0 ? 0 :
-                            tripdata.infinite_drops?.length - 1} drop</Text> */}
                         <TouchableOpacity style={{
                         }} onPress={() => props.navigation.navigate('InfiniteDrops')} >
                             <Text style={{ color: 'white' }}> see all drops</Text></TouchableOpacity>

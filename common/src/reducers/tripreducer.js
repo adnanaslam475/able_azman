@@ -24,7 +24,7 @@ export const tripreducer = (state = INITIAL_STATE, action) => {
             };
         case UPDATE_TRIP_DROP:
             // console.log('UPDATE_TRIP_DROPin reducer-==>', action.drop);
-            const inc = [...state.infinite_drops, action.drop==null ?null: action.drop]
+            const inc = [...state.infinite_drops, action.drop == null ? null : action.drop]
             return {
                 ...state,
                 drop: action.payload,

@@ -31,10 +31,11 @@ export default function FareScreen(props) {
     const auth = useSelector(state => state.auth);
     const estimate = useSelector(state => state.estimatedata.estimate);
     const bookingdata = useSelector(state => state.bookingdata);
-
     const mapRef = useRef(null);
 
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    // console.log('line37----->', tripdata.infinite_drops);
+    console.log('line37----->', estimate.estimateFare);
 
     const onPressCancel = () => {
         setButtonDisabled(false);
@@ -43,7 +44,13 @@ export default function FareScreen(props) {
 
     useEffect(() => {
         setTimeout(() => {
-            mapRef.current.fitToCoordinates([{ latitude: tripdata.pickup.lat, longitude: tripdata.pickup.lng }, { latitude: tripdata.drop.lat, longitude: tripdata.drop.lng }], {
+            mapRef.current.fitToCoordinates([{
+                latitude: tripdata.pickup.lat,
+                longitude: tripdata.pickup.lng
+            }, {
+                latitude: tripdata.drop.lat,
+                longitude: tripdata.drop.lng
+            }], {
                 edgePadding: { top: 40, right: 40, bottom: 40, left: 40 },
                 animated: true,
             });
@@ -54,10 +61,11 @@ export default function FareScreen(props) {
         if (bookingdata.booking) {
             dispatch(clearEstimate());
             dispatch(clearBooking());
-            if(bookingdata.booking.mainData.bookLater){
+            if (bookingdata.booking.mainData.bookLater) {
                 props.navigation.navigate('RideList');
-            }else{
-                props.navigation.navigate('BookedCab',{bookingId:bookingdata.booking.booking_id});
+            } else {
+                props.navigation.navigate('BookedCab',
+                    { bookingId: bookingdata.booking.booking_id });
             }
         }
         if (bookingdata.error && bookingdata.error.flag) {
@@ -85,7 +93,11 @@ export default function FareScreen(props) {
         <View style={styles.container}>
             <Header
                 backgroundColor={colors.GREY.default}
-                leftComponent={{ icon: 'md-menu', type: 'ionicon', color: colors.WHITE, size: 30, component: TouchableWithoutFeedback, onPress: () => { props.navigation.toggleDrawer(); } }}
+                leftComponent={{
+                    icon: 'md-menu', type: 'ionicon', color: colors.WHITE,
+                    size: 30, component: TouchableWithoutFeedback,
+                    onPress: () => { props.navigation.toggleDrawer(); }
+                }}
                 centerComponent={<Text style={styles.headerTitleStyle}>{language.confrim_booking}</Text>}
                 containerStyle={styles.headerStyle}
                 innerContainerStyles={styles.headerInnerStyle}
@@ -184,9 +196,11 @@ export default function FareScreen(props) {
                         </View>
 
                         <View style={styles.iconContainer}>
-                            <Text style={styles.priceText}> {settings ? settings.symbol : null} {estimate ? estimate.estimateFare : null}</Text>
+                            <Text style={styles.priceText}>
+                                {settings ? settings.symbol : null}
+                                {estimate ? estimate.estimateFare : null}
+                            </Text>
                         </View>
-
                     </View>
                     <View style={styles.priceDetailsMiddle}>
                         <View style={styles.triangle} />
@@ -294,7 +308,10 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     bottomContainer: { flex: 2.5, alignItems: 'center' },
-    offerContainer: { flex: 1, backgroundColor: colors.YELLOW.secondary, width: width, justifyContent: 'center', borderBottomColor: colors.YELLOW.primary, borderBottomWidth: Platform.OS == 'ios' ? 1 : 0 },
+    offerContainer: {
+        flex: 1, backgroundColor: colors.YELLOW.secondary, width: width, justifyContent: 'center',
+        borderBottomColor: colors.YELLOW.primary, borderBottomWidth: Platform.OS == 'ios' ? 1 : 0
+    },
     offerText: { alignSelf: 'center', color: colors.GREY.btnPrimary, fontSize: 12, fontFamily: 'Roboto-Regular' },
     priceDetailsContainer: { flex: 2.3, backgroundColor: colors.WHITE, flexDirection: 'row', position: 'relative', zIndex: 1 },
     priceDetailsLeft: { flex: 19 },

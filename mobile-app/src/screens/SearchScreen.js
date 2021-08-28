@@ -20,27 +20,26 @@ export default function SearchScreen(props) {
     const locationType = props.navigation.getParam('locationType');
 
     const updateLocation = (data) => {
-        fetchCoordsfromPlace(data.place_id).then((res)=>{
-            if(res && res.lat){
-                if(locationType=='pickup'){
+        fetchCoordsfromPlace(data.place_id).then((res) => {
+            if (res && res.lat) {
+                if (locationType == 'pickup') {
                     dispatch(updateTripPickup({
-                        lat:res.lat,
-                        lng:res.lng,
-                        add:data.description,
+                        lat: res.lat,
+                        lng: res.lng,
+                        add: data.description,
                         source: 'search'
                     }));
-                }else{
+                } else {
                     dispatch(updateTripDrop({
-                        lat:res.lat,
-                        lng:res.lng,
-                        add:data.description,
+                        lat: res.lat,
+                        lng: res.lng,
+                        add: data.description,
                         source: 'search'
                     }));
                 }
-
                 props.navigation.pop();
-            }else{
-                Alert.alert(language.alert,language.place_to_coords_error);
+            } else {
+                Alert.alert(language.alert, language.place_to_coords_error);
             }
         });
     }
@@ -86,7 +85,8 @@ export default function SearchScreen(props) {
                     color: colors.BLUE.light
                 },
             }}
-            renderDescription={(row) => row.description || row.formatted_address || row.name}
+            renderDescription={(row) => row.description ||
+                row.formatted_address || row.name}
             fetchDetails={false}
             minLength={4}
             debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
