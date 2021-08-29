@@ -8,7 +8,7 @@ import {
   IconButton,
   Toolbar,
   Typography
-}from '@material-ui/core';
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import AppMenu from "../views/AppMenu";
@@ -62,7 +62,7 @@ function ResponsiveDrawer(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar style={{backgroundColor: '#444444'}}>
+        <Toolbar style={{ backgroundColor: '#444444' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -93,7 +93,7 @@ function ResponsiveDrawer(props) {
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            <AppMenu/>
+            <AppMenu />
           </Drawer>
         </Hidden>
         <Hidden xsDown implementation="css">
@@ -104,7 +104,7 @@ function ResponsiveDrawer(props) {
             variant="permanent"
             open
           >
-            <AppMenu/>
+            <AppMenu />
           </Drawer>
         </Hidden>
       </nav>

@@ -4,6 +4,7 @@ import {
   FETCH_ESTIMATE_FAILED,
   CLEAR_ESTIMATE
 } from "../store/types";
+import lodash from 'lodash';
 import Polyline from '@mapbox/polyline';
 import { FareCalculator } from '../other/FareCalculator';
 import { getRouteDetails } from '../other/GoogleAPIFunctions';
@@ -13,8 +14,6 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
     type: FETCH_ESTIMATE,
     payload: bookingData,
   });
-
-
   const newdatafilt = bookingData.drops.filter(v => {
     if (v?.lat) {
       return { lat: v.lat, lng: v.lng, add: v.add }
@@ -22,8 +21,6 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
   })
   let arr = [];
   let startLoc;
-  let waypointss = [];
-  console.log('length-->', newdatafilt?.length)
   newdatafilt.forEach((v, i) => {
 
     startLoc = i == 0 ? '"' + bookingData.pickup.coords.lat + ',' + bookingData.pickup.coords.lng + '"' :
@@ -40,12 +37,10 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
               longitude: point[1]
             }
           })
-
-          console.log('waypoints-->', waypoints,)
           var fareCalculation = FareCalculator(res.distance, res.duration,
             bookingData.carDetails);
-          arr.push(fareCalculation.grandTotal);
-
+            arr.push(fareCalculation.grandTotal);
+            // console.log('arr-->', arr);
           if (i == newdatafilt.length - 1) {
             dispatch({
               type: FETCH_ESTIMATE_SUCCESS,
@@ -57,7 +52,7 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
                 carDetails: bookingData.carDetails,
                 estimateDistance: res.distance,
                 fareCost: fareCalculation ? parseFloat(fareCalculation.totalCost).toFixed(2) : 0,
-                estimateFare: fareCalculation ? parseFloat(fareCalculation.grandTotal).toFixed(2) : 0,
+                estimateFare: fareCalculation ? lodash.sum(arr).toFixed(2) : 0,
                 estimateTime: res.duration,
                 convenience_fees: fareCalculation ? parseFloat(fareCalculation.convenience_fees).toFixed(2) : 0,
                 waypoints: waypoints,
@@ -73,7 +68,7 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
           });
         }
       })
-  });
+  })
 }
 
 export const clearEstimate = () => (dispatch) => (firebase) => {

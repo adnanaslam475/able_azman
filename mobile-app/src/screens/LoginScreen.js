@@ -11,6 +11,13 @@ import {
     Image,
     ActivityIndicator
 } from "react-native";
+
+// import {
+//     GoogleSignin,
+//     GoogleSigninButton,
+//     statusCodes,
+// } from '@react-native-google-signin/google-signin';
+
 import MaterialButtonDark from "../components/MaterialButtonDark";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
@@ -19,9 +26,9 @@ import { FirebaseContext } from 'common/src';
 import { colors } from '../common/theme';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import RNPickerSelect from 'react-native-picker-select';
-import { 
+import {
     language,
-    countries, 
+    countries,
     default_country_code,
     FirebaseConfig,
     features
@@ -61,11 +68,11 @@ export default function EmailLoginScreen(props) {
     const emailInput = useRef(null);
     const passInput = useRef(null);
     const pageActive = useRef(false);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const recaptchaVerifier = useRef(null);
 
     useEffect(() => {
-        if(auth.info && pageActive.current){
+        if (auth.info && pageActive.current) {
             pageActive.current = false;
             props.navigation.navigate('AuthLoading');
             setLoading(false);
@@ -76,12 +83,12 @@ export default function EmailLoginScreen(props) {
             dispatch(clearLoginError());
             setLoading(false);
         }
-        if(auth.verificationId){
+        if (auth.verificationId) {
             pageActive.current = false;
             setState({ ...state, verificationId: auth.verificationId });
             setLoading(false);
         }
-    }, [auth.info,auth.error,auth.error.msg,auth.verificationId]);
+    }, [auth.info, auth.error, auth.error.msg, auth.verificationId]);
 
     onPressLogin = async () => {
         setLoading(true);
@@ -90,26 +97,26 @@ export default function EmailLoginScreen(props) {
                 let formattedNum = state.phoneNumber.replace(/ /g, '');
                 formattedNum = state.countryCode + formattedNum.replace(/-/g, '');
                 if (formattedNum.length > 8) {
-                    checkUserExists({mobile:formattedNum}).then((res)=>{
-                        if(res.users && res.users.length>0){
+                    checkUserExists({ mobile: formattedNum }).then((res) => {
+                        if (res.users && res.users.length > 0) {
                             pageActive.current = true;
-                            dispatch(requestPhoneOtpDevice(formattedNum,recaptchaVerifier.current));
+                            dispatch(requestPhoneOtpDevice(formattedNum, recaptchaVerifier.current));
                         }
-                        else{
+                        else {
                             setLoading(false);
-                            Alert.alert(language.alert,language.user_does_not_exists);
+                            Alert.alert(language.alert, language.user_does_not_exists);
                         }
                     });
                 } else {
-                    Alert.alert(language.alert,language.mobile_no_blank_error);
+                    Alert.alert(language.alert, language.mobile_no_blank_error);
                     setLoading(false);
                 }
             } else {
-                Alert.alert(language.alert,language.mobile_no_blank_error);
+                Alert.alert(language.alert, language.mobile_no_blank_error);
                 setLoading(false);
             }
         } else {
-            Alert.alert(language.alert,language.country_blank_error);
+            Alert.alert(language.alert, language.country_blank_error);
             setLoading(false);
         }
     }
@@ -117,7 +124,7 @@ export default function EmailLoginScreen(props) {
     onSignIn = async () => {
         setLoading(true);
         pageActive.current = true;
-        dispatch(mobileSignIn(                
+        dispatch(mobileSignIn(
             state.verificationId,
             state.verificationCode
         ));
@@ -236,7 +243,7 @@ export default function EmailLoginScreen(props) {
                             value={state.email}
                         />
                     </View>
-                :null}
+                    : null}
                 {state.customStyleIndex == 0 ?
                     <View style={styles.box2}>
                         <TextInput
@@ -248,54 +255,54 @@ export default function EmailLoginScreen(props) {
                             secureTextEntry={true}
                         />
                     </View>
-                :null}
+                    : null}
                 {state.customStyleIndex == 0 ?
                     <MaterialButtonDark
                         onPress={onAction}
                         style={styles.materialButtonDark}
                     >{language.login_button}</MaterialButtonDark>
-                :null}
+                    : null}
                 {state.customStyleIndex == 0 ?
                     <View style={styles.linkBar}>
                         <TouchableOpacity style={styles.barLinks} onPress={() => Forgot_Password(state.email)}>
                             <Text style={styles.linkText}>{language.forgot_password_link}</Text>
                         </TouchableOpacity>
                     </View>
-                : null}
+                    : null}
                 {state.customStyleIndex != 0 ?
-                <View style={styles.box1}>
-                    <RNPickerSelect
-                        placeholder={{ label: language.select_country, value: language.select_country }}
-                        value={state.countryCode}
-                        useNativeAndroidPickerStyle={true}
-                        style={{
-                            inputIOS: styles.pickerStyle,
-                            inputAndroid: styles.pickerStyle,
-                        }}
-                        onValueChange={(value) => setState({ ...state, countryCode: value })}
-                        items={state.countryCodeList}
-                        disabled={!!state.verificationId || !features.AllowCountrySelection ? true : false}
-                    />
-                </View>
-                : null}
+                    <View style={styles.box1}>
+                        <RNPickerSelect
+                            placeholder={{ label: language.select_country, value: language.select_country }}
+                            value={state.countryCode}
+                            useNativeAndroidPickerStyle={true}
+                            style={{
+                                inputIOS: styles.pickerStyle,
+                                inputAndroid: styles.pickerStyle,
+                            }}
+                            onValueChange={(value) => setState({ ...state, countryCode: value })}
+                            items={state.countryCodeList}
+                            disabled={!!state.verificationId || !features.AllowCountrySelection ? true : false}
+                        />
+                    </View>
+                    : null}
                 {state.customStyleIndex != 0 ?
-                <View style={styles.box2}>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder={language.mobile_no_placeholder}
-                        onChangeText={(value) => setState({ ...state, phoneNumber: value })}
-                        value={state.phoneNumber}
-                        editable={!!state.verificationId ? false : true}
-                        keyboardType="phone-pad"
-                    />
-                </View>
-                : null}
-                {state.customStyleIndex != 0?state.verificationId ? null :
+                    <View style={styles.box2}>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder={language.mobile_no_placeholder}
+                            onChangeText={(value) => setState({ ...state, phoneNumber: value })}
+                            value={state.phoneNumber}
+                            editable={!!state.verificationId ? false : true}
+                            keyboardType="phone-pad"
+                        />
+                    </View>
+                    : null}
+                {state.customStyleIndex != 0 ? state.verificationId ? null :
                     <MaterialButtonDark
                         onPress={onPressLogin}
                         style={styles.materialButtonDark}
                     >{language.request_otp}</MaterialButtonDark>
-                :null}
+                    : null}
                 {state.customStyleIndex != 0 && !!state.verificationId ?
                     <View style={styles.box2}>
                         <TextInput
@@ -321,12 +328,12 @@ export default function EmailLoginScreen(props) {
                             <Text style={styles.actionText}>{language.cancel}</Text>
                         </TouchableOpacity>
                     </View>
-                : null}
-                {loading?
+                    : null}
+                {loading ?
                     <View style={styles.loading}>
                         <ActivityIndicator color={colors.BLACK} size='large' />
                     </View>
-                :null}
+                    : null}
             </ImageBackground>
         </KeyboardAvoidingView>
     );
@@ -341,8 +348,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingBottom:40
-      },
+        paddingBottom: 40
+    },
     container: {
         flex: 1
     },
