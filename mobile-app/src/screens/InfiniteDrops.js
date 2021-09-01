@@ -20,6 +20,7 @@ function InfiniteDrops() {
     //admin
     // fxmysia@gmail.com
     // Mn641964612
+    // node -v 12.21.0
     return (
         <View style={{ flex: 1 }}>
             <Text style={{
@@ -27,17 +28,15 @@ function InfiniteDrops() {
                 fontWeight: 'bold'
             }}>Selected Drops</Text>
             {infinite_drops?.length > 0 && infinite_drops?.map((v, i) => {
-                // console.log('in--->', v?.add)
                 return (
                     <View key={i} style={styles.in_view}>
                         <Text style={styles.txt}>{v?.add}</Text>
                         <TouchableOpacity onPress={() => dispatch(removedrop(v?.add))}
-                            style={{}}>
+                        >
                             {i > 0 && <Icon
                                 name='close'
                                 color={colors.BLACK}
                                 size={30}
-                            // size={tripdata.selected == 'pickup' ? 24 : 14}
                             />}
                         </TouchableOpacity>
                     </View>

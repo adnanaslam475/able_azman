@@ -22,7 +22,6 @@ export const fetchAddressfromCoords = async (latlng) => {
 }
 
 export const getRouteDetails = async (platform, startLoc, destLoc) => {
-    console.log('inroutedetail25->', startLoc, destLoc)
     let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destLoc}&key=${Google_Map_Key}`
     let cors_proxy = 'https://cors-proxy.dev.exicube.com/';
     url = platform == 'web' ? cors_proxy + url : url;

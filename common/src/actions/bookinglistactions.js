@@ -15,7 +15,6 @@ import { fetchAddressfromCoords } from '../other/GoogleAPIFunctions';
 import { language, dateStyle } from 'config';
 
 export const fetchBookings = (uid, role) => (dispatch) => (firebase) => {
-
   const {
     bookingListRef,
   } = firebase;
@@ -30,7 +29,7 @@ export const fetchBookings = (uid, role) => (dispatch) => (firebase) => {
       const active = [];
       let tracked = null;
       const bookings = Object.keys(data)
-        .map((i) => {
+        .map(i => {
           data[i].id = i;
           let dt = new Date(data[i].tripdate);
           data[i].bookingDate = dt.toLocaleString(dateStyle);
@@ -48,7 +47,8 @@ export const fetchBookings = (uid, role) => (dispatch) => (firebase) => {
           return data[i];
         });
       for (let i = 0; i < bookings.length; i++) {
-        if (['NEW', 'ACCEPTED', 'ARRIVED', 'STARTED', 'REACHED', 'PENDING', 'PAID'].indexOf(bookings[i].status) != -1) {
+        if (['NEW', 'ACCEPTED', 'ARRIVED', 'STARTED',
+          'REACHED', 'PENDING', 'PAID'].indexOf(bookings[i].status) != -1) {
           active.push(bookings[i]);
         }
         if ((['ACCEPTED', 'ARRIVED', 'STARTED'].indexOf(bookings[i].status) != -1) && role == 'driver') {
@@ -130,7 +130,7 @@ export const updateBooking = (booking) => (dispatch) => (firebase) => {
       lng: lastLocation.lng
     });
 
-    trackingRef(booking.id).orderByKey().once('value',(snapshot)=>{  
+    trackingRef(booking.id).orderByKey().once('value', (snapshot) => {
       const data = snapshot.val();
       let res = GetTripDistance(data);
       let distance = res.distance;
@@ -175,14 +175,14 @@ export const updateBooking = (booking) => (dispatch) => (firebase) => {
   }
   if (booking.status == 'PAID') {
     singleBookingRef(booking.id).update(booking);
-    if(booking.driver == auth.currentUser.uid && (booking.payment_mode == 'cash' || booking.payment_mode == 'wallet')){
+    if (booking.driver == auth.currentUser.uid && (booking.payment_mode == 'cash' || booking.payment_mode == 'wallet')) {
       singleUserRef(booking.driver).update({ queue: false });
     }
 
     singleUserRef(booking.driver).once('value', snapshot => {
       let walletBalance = snapshot.val().walletBalance;
       walletBalance = walletBalance + parseFloat(booking.driver_share);
-      if(parseFloat(booking.cashPaymentAmount)>0){
+      if (parseFloat(booking.cashPaymentAmount) > 0) {
         walletBalance = walletBalance - parseFloat(booking.cashPaymentAmount);
       }
       walletBalRef(booking.driver).set(walletBalance);
@@ -194,8 +194,8 @@ export const updateBooking = (booking) => (dispatch) => (firebase) => {
         txRef: booking.id
       }
       walletHistoryRef(booking.driver).push(details);
-      
-      if(parseFloat(booking.cashPaymentAmount)>0){
+
+      if (parseFloat(booking.cashPaymentAmount) > 0) {
         let details = {
           type: 'Debit',
           amount: booking.cashPaymentAmount,
@@ -203,7 +203,7 @@ export const updateBooking = (booking) => (dispatch) => (firebase) => {
           txRef: booking.id
         }
         walletHistoryRef(booking.driver).push(details);
-      }  
+      }
     });
 
     RequestPushMsg(booking.customer_token, language.notification_title, language.success_payment);
@@ -237,7 +237,7 @@ export const updateBooking = (booking) => (dispatch) => (firebase) => {
             rate: booking.rating
           });
         }
-        singleUserRef(booking.driver).update({ratings: ratings});
+        singleUserRef(booking.driver).update({ ratings: ratings });
       });
     }
   }

@@ -88,7 +88,8 @@ export default function FareScreen(props) {
             tripdate: estimate.bookLater ? new Date(estimate.bookingDate).toString() : new Date().toString(),
             bookLater: estimate.bookLater,
             settings: settings,
-            booking_type_web: false
+            booking_type_web: false,
+            infinite_drops: tripdata.infinite_drops
         }));
     };
 

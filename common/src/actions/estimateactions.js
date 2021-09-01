@@ -9,6 +9,7 @@ import Polyline from '@mapbox/polyline';
 import { FareCalculator } from '../other/FareCalculator';
 import { getRouteDetails } from '../other/GoogleAPIFunctions';
 
+
 export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
   dispatch({
     type: FETCH_ESTIMATE,
@@ -19,28 +20,32 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
       return { lat: v.lat, lng: v.lng, add: v.add }
     }
   })
+  let waypointsarr = [];
   let arr = [];
   let startLoc;
   newdatafilt.forEach((v, i) => {
-
     startLoc = i == 0 ? '"' + bookingData.pickup.coords.lat + ',' + bookingData.pickup.coords.lng + '"' :
       '"' + newdatafilt[i - 1].lat + ',' + newdatafilt[i - 1].lng + '"';
     let destLoc = '"' + newdatafilt[i].lat + ',' + newdatafilt[i].lng + '"';
+
 
     getRouteDetails(bookingData.platform, startLoc, destLoc)
       .then(res => {
         if (res) {
           let points = Polyline.decode(res.polylinePoints);
-          let waypoints = points.map(point => {
+          console.log('res.polylinepoi----->', res.polylinePoints);
+          console.log('pitns-->----->', points);
+          let waypoints = points.map((point,i) => {
             return {
               latitude: point[0],
               longitude: point[1]
             }
           })
+          waypointsarr.push(waypoints);
           var fareCalculation = FareCalculator(res.distance, res.duration,
             bookingData.carDetails);
-            arr.push(fareCalculation.grandTotal);
-            // console.log('arr-->', arr);
+          arr.push(fareCalculation.grandTotal);
+          console.log('arr-->', waypointsarr);
           if (i == newdatafilt.length - 1) {
             dispatch({
               type: FETCH_ESTIMATE_SUCCESS,
@@ -55,7 +60,7 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
                 estimateFare: fareCalculation ? lodash.sum(arr).toFixed(2) : 0,
                 estimateTime: res.duration,
                 convenience_fees: fareCalculation ? parseFloat(fareCalculation.convenience_fees).toFixed(2) : 0,
-                waypoints: waypoints,
+                waypoints: arr,
                 arr
               },
             })
@@ -67,6 +72,11 @@ export const getEstimate = (bookingData) => (dispatch) => (firebase) => {
             payload: "No Route Found",
           });
         }
+      }).catch(e => {
+        dispatch({
+          type: FETCH_ESTIMATE_FAILED,
+          payload: "No Route Found",
+        });
       })
   })
 }

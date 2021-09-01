@@ -104,6 +104,7 @@ export default function EditProfilePage(props) {
             quality: 1.0,
         });
         if (!result.cancelled) {
+            console.log(name)
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -121,23 +122,20 @@ export default function EditProfilePage(props) {
                 contentType: "image/png"
             });
             const remoteURL = await snapshot.ref.getDownloadURL();
-            switch (name) {
-                case 'idcard':
-                    setidcard_image(remoteURL)
-                    break;
-                case 'license':
-                    setdrivinglicense_img(remoteURL);
-                    break;
-                case 'id_pass':
-                    set_passenger_id_passImg(remoteURL)
-                    break;
-                default:
-                    break;
+            console.log('line124--->',name, remoteURL)
+            if (name == 'idcard') {
+                setidcard_image(remoteURL);
             }
+            else if (name == 'license') {
+                setdrivinglicense_img(remoteURL);
+            }
+            else if (name == 'id_pass') {
+                set_passenger_id_passImg(remoteURL)
+            };
         }
     }
 
-
+    console.log('ererere142->', passenger_id_passImg)
     return (
         <View style={styles.main}>
             <Header
@@ -277,7 +275,7 @@ export default function EditProfilePage(props) {
                                         width: width * 0.4
                                     }} />}
                         </View> :
-                            <View>
+                            <View style={{ alignItems: 'center' }}>
                                 {auth.info.profile.passenger_id_passImg || passenger_id_passImg ?
                                     <TouchableOpacity onPress={() => imageHandler('ip_pass')}>
                                         <Image source={{
@@ -286,8 +284,10 @@ export default function EditProfilePage(props) {
                                         }}
                                             style={styles.img} />
                                     </TouchableOpacity> :
-                                    <Button titleStyle={styles.buttonTitle}
-                                        onPress={() => imageHandler('ip_pass')}
+                                    <Button titleStyle={{
+                                        ...styles.buttonTitle,
+                                    }}
+                                        onPress={() => imageHandler('id_pass')}
                                         title='Upload Id/Passport'
                                         buttonStyle={{
                                             ...styles.registerButton,

@@ -210,8 +210,8 @@ export default function ProfileScreen(props) {
                             }
                         </View>
                     </View>
-                    <Text style={styles.textPropStyle} >{profileData && profileData.firstName.toUpperCase() +
-                        " " + profileData?.lastName.toUpperCase()}</Text>
+                    <Text style={styles.textPropStyle} >{profileData && profileData?.firstName?.toUpperCase() +
+                        " " + profileData?.lastName?.toUpperCase()}</Text>
                 </View>
 
                 <View style={styles.newViewStyle}>

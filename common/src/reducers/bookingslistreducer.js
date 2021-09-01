@@ -20,6 +20,7 @@ const INITIAL_STATE = {
 export const bookingslistreducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_BOOKINGS:
+      
       return {
         ...state,
         loading: true
