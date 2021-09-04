@@ -11,15 +11,16 @@ import { removedrop } from '../../../common/src/actions/tripactions';
 function InfiniteDrops() {
     const { infinite_drops } = useSelector(state => state.tripdata);
     const dispatch = useDispatch();
-    // console.log('infnintedrops screen', infinite_drops);
+//Aslan_@g.com
 
-
-    //jumafx2@gm
+    //psngr
+    // jumafx2@gm
     // Mn6419646
 
     //admin
     // fxmysia@gmail.com
     // Mn641964612
+    // Mn6419646#
     // node -v 12.21.0
     return (
         <View style={{ flex: 1 }}>

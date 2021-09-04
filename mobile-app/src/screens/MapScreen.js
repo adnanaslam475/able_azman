@@ -467,7 +467,7 @@ export default function MapScreen(props) {
             <Modal
                 animationType="fade"
                 transparent={true}
-                visible={loadingModal}
+                visible={false}
                 onRequestClose={() => {
                     setLoadingModal(false);
                 }}>

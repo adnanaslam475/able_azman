@@ -41,12 +41,19 @@ export default function EditProfilePage(props) {
 
     useEffect(() => {
         if (auth.info && auth.info.profile) {
+            // console.log('idcard_image=========>', auth.info.profile.idcard_image,)
+            // console.log('drivinglicense_img=========>', auth.info.profile.drivinglicense_img);
+            // console.log('passenger_id_passImg=========>', auth.info.profile.passenger_id_passImg,)
+
             setidcard_image(auth.info.profile.idcard_image == undefined ? '' :
-                auth.info.profile.idcard_image)
+                auth.info.profile.idcard_image);
+
             setdrivinglicense_img(auth.info.profile.drivinglicense_img == undefined ? '' :
-                auth.info.profile.drivinglicense_img)
+                auth.info.profile.drivinglicense_img);
+
             set_passenger_id_passImg(auth.info.profile.passenger_id_passImg == undefined ? '' :
-                auth.info.profile.passenger_id_passImg)
+                auth.info.profile.passenger_id_passImg);
+
             setProfileData({
                 firstName: !auth.info.profile.firstName ||
                     auth.info.profile.firstName === ' ' ? '' : auth.info.profile.firstName,
@@ -104,7 +111,6 @@ export default function EditProfilePage(props) {
             quality: 1.0,
         });
         if (!result.cancelled) {
-            console.log(name)
             const blob = await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
@@ -122,7 +128,6 @@ export default function EditProfilePage(props) {
                 contentType: "image/png"
             });
             const remoteURL = await snapshot.ref.getDownloadURL();
-            console.log('line124--->',name, remoteURL)
             if (name == 'idcard') {
                 setidcard_image(remoteURL);
             }
@@ -130,12 +135,12 @@ export default function EditProfilePage(props) {
                 setdrivinglicense_img(remoteURL);
             }
             else if (name == 'id_pass') {
+
                 set_passenger_id_passImg(remoteURL)
             };
         }
     }
 
-    console.log('ererere142->', passenger_id_passImg)
     return (
         <View style={styles.main}>
             <Header
@@ -250,7 +255,7 @@ export default function EditProfilePage(props) {
                             flexDirection: 'row', justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            {auth.info.profile.idcard_image || idcard_image ?
+                            {idcard_image ?
                                 <TouchableOpacity onPress={() => imageHandler('idcard')} >
                                     <Image
                                         style={{ ...styles.img, marginRight: 10 }}
@@ -259,8 +264,12 @@ export default function EditProfilePage(props) {
                                 <Button titleStyle={styles.buttonTitle}
                                     onPress={() => imageHandler('idcard')}
                                     title='Upload Id card'
-                                    buttonStyle={{ ...styles.registerButton, width: width * 0.3 }} />}
-                            {auth.info.profile.drivinglicense_img || drivinglicense_img ?
+                                    buttonStyle={{
+                                        ...styles.registerButton,
+                                        marginRight: 9,
+                                        width: width * 0.3
+                                    }} />}
+                            {drivinglicense_img ?
                                 <TouchableOpacity onPress={() => imageHandler('license')}>
                                     <Image source={{
                                         uri: drivinglicense_img ||
@@ -277,7 +286,7 @@ export default function EditProfilePage(props) {
                         </View> :
                             <View style={{ alignItems: 'center' }}>
                                 {auth.info.profile.passenger_id_passImg || passenger_id_passImg ?
-                                    <TouchableOpacity onPress={() => imageHandler('ip_pass')}>
+                                    <TouchableOpacity onPress={() => imageHandler('id_pass')}>
                                         <Image source={{
                                             uri: passenger_id_passImg ||
                                                 auth.info.profile.passenger_id_passImg
